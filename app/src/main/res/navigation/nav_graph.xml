@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/registerFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.pan.mvvm.fragments.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/registerFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_loginFragment_pop_including_registerFragment"
+            app:popUpTo="@id/registerFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.pan.mvvm.fragments.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/action_registerFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_registerFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/registerFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.pan.mvvm.fragments.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_popularPostDetailFragment"
+            app:destination="@id/popularPostDetailFragment"
+            />
+        <action
+            android:id="@+id/action_mainFragment_to_latestPostDetailFragment"
+            app:destination="@id/latestPostDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/popularPostDetailFragment"
+        android:name="com.pan.mvvm.fragments.PopularPostDetailFragment"
+        android:label="fragment_popular_post_detail"
+        tools:layout="@layout/fragment_popular_post_detail" >
+        <action
+            android:id="@+id/action_popularPostDetailFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="true"
+
+             />
+        <argument
+            android:name="popularArgs"
+            app:argType="com.pan.mvvm.models.PopularItem" />
+    </fragment>
+    <fragment
+        android:id="@+id/latestPostDetailFragment"
+        android:name="com.pan.mvvm.fragments.LatestPostDetailFragment"
+        android:label="fragment_latest_post_detail"
+        tools:layout="@layout/fragment_latest_post_detail" >
+        <action
+            android:id="@+id/action_latestPostDetailFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <argument
+            android:name="latestPostArgs"
+            app:argType="com.pan.mvvm.models.LatestPostItem" />
+    </fragment>
+
+</navigation>

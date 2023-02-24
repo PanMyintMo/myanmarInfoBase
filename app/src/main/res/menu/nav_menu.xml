@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home"
+        android:title="@string/home"
+        tools:targetApi="o">
+
+    </item>
+    <item
+        android:id="@+id/save"
+        android:icon="@drawable/ic_save"
+        android:title="@string/save"
+        tools:targetApi="o">
+
+    </item>
+    <!--<item
+        android:id="@+id/favorite"
+        android:icon="@drawable/ic_favorite"
+        android:iconTint="@color/white"
+        android:title="@string/favorite"
+        tools:targetApi="o">
+
+    </item>
+    <item
+        android:id="@+id/setting"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/setting"
+        tools:targetApi="o">
+
+    </item>
+    <item android:title="@string/profile">
+        <menu>
+            <item
+                android:id="@+id/nav_login"
+                android:icon="@drawable/ic_login"
+                android:title="@string/login"
+                tools:targetApi="o">
+
+            </item>
+        </menu>
+    </item>
+    <item android:title="@string/category">
+        <menu>
+            <item
+                android:id="@+id/changePassword"
+                android:icon="@drawable/ic_changepassword"
+                android:title="Change Password"
+                tools:targetApi="o">
+
+            </item>
+            <item
+                android:id="@+id/logout"
+                android:icon="@drawable/ic_logout"
+                android:title="@string/logout"
+                tools:targetApi="o">
+
+            </item>
+        </menu>
+    </item>-->
+</menu>
+

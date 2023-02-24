@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.MainFragment">
+
+     <LinearLayout
+         android:orientation="vertical"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content">
+
+          <androidx.recyclerview.widget.RecyclerView
+              android:id="@+id/mainRecycler"
+              android:layout_width="match_parent"
+              android:layout_height="100dp"
+              android:background="@color/purple_200"
+              android:orientation="horizontal"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintHorizontal_bias="0.5"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toTopOf="parent" />
+
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="5dp">
+
+          </View>
+
+          <TextView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_margin="10dp"
+              android:text="@string/trending_post"
+              android:textSize="25sp"
+              android:textStyle="bold">
+
+          </TextView>
+
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="5dp">
+
+          </View>
+
+          <androidx.recyclerview.widget.RecyclerView
+              android:id="@+id/popularRecycler"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal">
+
+          </androidx.recyclerview.widget.RecyclerView>
+
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="5dp">
+
+          </View>
+
+          <TextView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_margin="10dp"
+              android:text="@string/latest_post"
+              android:textSize="25sp"
+              android:textStyle="bold">
+
+          </TextView>
+
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="10dp">
+
+          </View>
+
+          <androidx.recyclerview.widget.RecyclerView
+              android:id="@+id/latestRecycler"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal">
+
+          </androidx.recyclerview.widget.RecyclerView>
+
+          <com.github.ybq.android.spinkit.SpinKitView
+              android:id="@+id/progress_bar"
+              style="@style/SpinKitView.ThreeBounce"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:indeterminate="true"
+              android:visibility="gone"
+              app:SpinKit_Color="@color/black"
+              tools:ignore="MissingClass" />
+
+     </LinearLayout>
+        </ScrollView>
