@@ -10,7 +10,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pan.mvvm.api.MyanFoBaseApi
 import com.pan.mvvm.database.PopularPostDatabase
-import com.pan.mvvm.database.PopularPostEntity
 import com.pan.mvvm.models.CategoryItem
 import com.pan.mvvm.models.LatestPostItem
 import com.pan.mvvm.models.PopularItem

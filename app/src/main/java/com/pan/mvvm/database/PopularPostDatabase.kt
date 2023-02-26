@@ -5,6 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.pan.mvvm.database.converter.PopularTypeConverter
 import com.pan.mvvm.database.dao.PopularPostDao
+import com.pan.mvvm.models.PopularItem
 import javax.inject.Inject
 
 @Database(

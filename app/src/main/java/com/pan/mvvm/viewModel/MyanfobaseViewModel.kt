@@ -12,12 +12,13 @@ import com.pan.mvvm.database.PopularPostEntity
 import com.pan.mvvm.models.PopularItem
 import com.pan.mvvm.repository.MyanfobaseRepository
 import com.pan.mvvm.utils.NetworkResult
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 import javax.inject.Inject
 
-
+//@HiltViewModel
 class MyanfobaseViewModel @Inject constructor(
     private val repository: MyanfobaseRepository,
     application: Application
@@ -83,12 +84,8 @@ class MyanfobaseViewModel @Inject constructor(
     private val myanfobaseRepository: MyanfobaseRepository
 ) :
     ViewModel() {
-
-
-
     */
 /**Retrofit*//*
-
     //get CategoryName
     val getAllCategoryLiveData get() = myanfobaseRepository.getAllCategoryItem
     fun getAllCategoryItem() {
@@ -96,7 +93,6 @@ class MyanfobaseViewModel @Inject constructor(
             myanfobaseRepository.getAllCateName()
         }
     }
-
     //getPopularPostItem
     val getAllPopuplarPostItemLiveData get() = myanfobaseRepository.getPopularItem
     fun getAllPopularPostItem() {
@@ -104,7 +100,6 @@ class MyanfobaseViewModel @Inject constructor(
             myanfobaseRepository.getAllPopularPost()
         }
     }
-
     //getLatestPostItem
     val getAllLatestPostLiveData get() = myanfobaseRepository.getLatestPostItem
     fun getLatestPostItem() {
@@ -112,12 +107,9 @@ class MyanfobaseViewModel @Inject constructor(
             myanfobaseRepository.getLatestPostItem()
         }
     }
-
     */
 /**Room Database*//*
-
     //insert popularpost item
-
     fun insertPopularPostItem(popularPostEntity: PopularPostEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             myanfobaseRepository.insertPopularPostItem(popularPostEntity)

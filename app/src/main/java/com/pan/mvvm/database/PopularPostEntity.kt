@@ -12,3 +12,4 @@ data class PopularPostEntity(var popularItem:PopularItem) {
     var id:Int =0
 }
 
+

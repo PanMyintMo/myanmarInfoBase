@@ -11,7 +11,7 @@ import com.pan.mvvm.models.PopularItem
 class PopularTypeConverter {
     private var gson = Gson()
 
-/*
+
     @TypeConverter
     fun popularItemPostToString(popularItem: PopularItem): String {
         return gson.toJson(popularItem)
@@ -22,7 +22,7 @@ class PopularTypeConverter {
         val listType = object : TypeToken<PopularItem>() {}.type
         return gson.fromJson(data, listType)
     }
-*/
+
 
 
     @TypeConverter

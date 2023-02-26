@@ -14,8 +14,8 @@ interface PopularPostDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPopularItem(popularPostEntity: PopularPostEntity)
 
-    @Query("SELECT * FROM popular_table ORDER BY id ASC ")
-    fun readPopularItem(): LiveData<List<PopularItem>>
+    /*@Query("SELECT * FROM popular_table ORDER BY id ASC ")
+    fun readPopularItem(): LiveData<List<PopularItem>>*/
 
 
 }

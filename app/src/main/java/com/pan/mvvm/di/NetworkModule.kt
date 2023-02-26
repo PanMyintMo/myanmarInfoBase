@@ -46,5 +46,4 @@ class NetworkModule {
             .client(okHttpClient)
             .build().create(MyanFoBaseApi::class.java)
     }
-
 }

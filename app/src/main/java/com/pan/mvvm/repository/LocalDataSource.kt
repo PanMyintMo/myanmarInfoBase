@@ -8,8 +8,8 @@ import javax.inject.Inject
 
 class LocalDataSource @Inject() constructor(val popularPostDao: PopularPostDao) {
 
-    fun insertPopularItem(popularPostEntity: PopularPostEntity): LiveData<List<PopularItem>> {
-        return popularPostDao.readPopularItem()
+    suspend fun insertPopularItem(popularPostEntity: PopularPostEntity) {
+        return popularPostDao.insertPopularItem(popularPostEntity)
     }
 
 }
