@@ -1,10 +1,12 @@
 package com.pan.mvvm.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.pan.mvvm.databinding.CategoryRowBinding
 import com.pan.mvvm.models.CategoryItem
+import com.pan.mvvm.ui.SingleCategoryActivity
 
 class CategoryRowAdapter : RecyclerView.Adapter<CategoryRowAdapter.MyViewHolder>() {
 
@@ -12,7 +14,7 @@ class CategoryRowAdapter : RecyclerView.Adapter<CategoryRowAdapter.MyViewHolder>
 
     fun setCateNamList(cateItemList: List<CategoryItem>?) {
         this.cateItem = cateItemList!!
-       // notifyDataSetChanged()
+
     }
 
     class MyViewHolder(private val binding: CategoryRowBinding) :
@@ -20,7 +22,11 @@ class CategoryRowAdapter : RecyclerView.Adapter<CategoryRowAdapter.MyViewHolder>
 
         fun bind(cateItem: CategoryItem) {
             binding.btnCate.text = cateItem.catename
-
+            binding.btnCate.setOnClickListener {
+                val intent = Intent(itemView.context, SingleCategoryActivity::class.java)
+                intent.putExtra(SingleCategoryActivity.CAT_KEY, cateItem.catename)
+                itemView.context.startActivity(intent)
+            }
         }
 
         companion object {

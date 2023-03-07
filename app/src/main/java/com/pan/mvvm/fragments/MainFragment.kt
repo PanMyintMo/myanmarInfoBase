@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pan.mvvm.adapter.CategoryRowAdapter
 import com.pan.mvvm.adapter.LatestPostAdapter
@@ -24,49 +23,38 @@ class MainFragment : Fragment() {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var adapter: CategoryRowAdapter
     private lateinit var popularPostAdapter: PopularPostAdapter
     private lateinit var latestPostAdapter: LatestPostAdapter
 
-private lateinit var myanfobaseViewModel:MyanfobaseViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        myanfobaseViewModel = ViewModelProvider(requireActivity())[MyanfobaseViewModel::class.java]
-    }
-
+    private val myanfobaseViewModel by viewModels<MyanfobaseViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainBinding.inflate(layoutInflater, container, false)
+
+        //adapter
         adapter = CategoryRowAdapter()
         popularPostAdapter = PopularPostAdapter()
         latestPostAdapter = LatestPostAdapter()
 
+        bindObserversForCategoryItem()
+        bindObserversForPopularItem()
+        bindObserversForLatestPostItem()
 
+        //getAllCategoryName
+        myanfobaseViewModel.getAllCategoryItem()
+        //getAllPopularItem
+        myanfobaseViewModel.getAllPopularPostItem()
+        //getLatestPostItem
+        myanfobaseViewModel.getLatestPostItem()
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
-        //   bindObserversForCategoryItem()
-        bindObserversForPopularItem()
-        //   bindObserversForLatestPostItem()
-        //getAllCategoryName
-        //  myanfobaseViewModel.getAllCategoryItem()
-        //getAllPopularItem
-        myanfobaseViewModel.getPopularItem
-        //getLatestPostItem
-        // myanfobaseViewModel.getLatestPostItem()
-
-
-    }
-
-/*    private fun bindObserversForLatestPostItem() {
+    private fun bindObserversForLatestPostItem() {
         myanfobaseViewModel.getAllLatestPostLiveData.observe(viewLifecycleOwner) { response ->
             binding.progressBar.isVisible = false
             when (response) {
@@ -79,12 +67,9 @@ private lateinit var myanfobaseViewModel:MyanfobaseViewModel
                                 LinearLayoutManager.HORIZONTAL,
                                 false
                             )
-                      //  binding.latestRecycler.setHasFixedSize(true)
                         latestPostAdapter.setLatestPostItem(it)
                         binding.latestRecycler.adapter = latestPostAdapter
                         adapter.notifyDataSetChanged()
-
-
                     }
                 }
                 is NetworkResult.Error -> {
@@ -95,14 +80,12 @@ private lateinit var myanfobaseViewModel:MyanfobaseViewModel
                     binding.progressBar.isVisible = true
 
                 }
-
             }
-
         }
-    }*/
+    }
 
     private fun bindObserversForPopularItem() {
-        myanfobaseViewModel.getPopularItem.observe(viewLifecycleOwner) { response ->
+        myanfobaseViewModel.getAllPopuplarPostItemLiveData.observe(viewLifecycleOwner) { response ->
 
             binding.progressBar.isVisible = false
             when (response) {
@@ -134,7 +117,7 @@ private lateinit var myanfobaseViewModel:MyanfobaseViewModel
         }
     }
 
-/*    private fun bindObserversForCategoryItem() {
+    private fun bindObserversForCategoryItem() {
         myanfobaseViewModel.getAllCategoryLiveData.observe(viewLifecycleOwner) { response ->
 
             binding.progressBar.isVisible = false
@@ -158,13 +141,14 @@ private lateinit var myanfobaseViewModel:MyanfobaseViewModel
                 is NetworkResult.Error -> {
                     Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT).show()
                 }
-                is NetworkResult.git initLoading -> {
+                is NetworkResult.Loading -> {
                     binding.progressBar.isVisible = true
                 }
 
             }
         }
-    }*/
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

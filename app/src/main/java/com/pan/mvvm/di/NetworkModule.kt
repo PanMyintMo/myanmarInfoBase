@@ -1,5 +1,6 @@
 package com.pan.mvvm.di
 
+
 import com.pan.mvvm.api.AuthInterceptor
 import com.pan.mvvm.api.MyanFoBaseApi
 import com.pan.mvvm.api.UserApi
@@ -13,37 +14,34 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
-@InstallIn(SingletonComponent::class)
 @Module
+@InstallIn(SingletonComponent::class)
 class NetworkModule {
 
     @Singleton
     @Provides
-    fun  provideRetrofitBuilder() :Retrofit.Builder{
+    fun provideRetrofitBuilder(): Retrofit.Builder {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BASE_URL)
-
     }
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(authInterceptor: AuthInterceptor) :OkHttpClient{
+    fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {
         return OkHttpClient.Builder().addInterceptor(authInterceptor).build()
     }
 
     @Singleton
     @Provides
-    fun provideUserApi(retrofitBuilder: Retrofit.Builder) : UserApi{
+    fun provideUserApi(retrofitBuilder: Retrofit.Builder): UserApi {
         return retrofitBuilder.build().create(UserApi::class.java)
     }
 
-
     @Singleton
     @Provides
-    fun provideMyanfoBase(retrofitBuilder: Retrofit.Builder,okHttpClient: OkHttpClient) : MyanFoBaseApi{
-        return retrofitBuilder
-            .client(okHttpClient)
-            .build().create(MyanFoBaseApi::class.java)
+    fun provideMyanFoBaseApi(retrofitBuilder: Retrofit.Builder, okHttpClient: OkHttpClient): MyanFoBaseApi {
+        return retrofitBuilder.client(okHttpClient).build().create(MyanFoBaseApi::class.java)
     }
+
 }

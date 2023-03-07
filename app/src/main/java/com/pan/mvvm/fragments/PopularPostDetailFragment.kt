@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -32,6 +33,8 @@ class PopularPostDetailFragment : Fragment() {
             Glide.with(it).load(args.popularArgs.userprofile).into(_binding!!.trendingImage)
         }
         val postList = args.popularArgs.files
+
+
         popularPostImageAdapter = PopularPostImageAdapter(requireContext(), postList)
         binding?.imageDetailListAdapter?.adapter = popularPostImageAdapter
         binding?.imageDetailListAdapter?.layoutManager =
@@ -40,6 +43,18 @@ class PopularPostDetailFragment : Fragment() {
         _binding!!.favoriteText.text = args.popularArgs.v.toString()
         _binding!!.viewCount.text = args.popularArgs.viewcount.toString()
         return binding?.root
+
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        (activity as AppCompatActivity).supportActionBar?.hide()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (activity as AppCompatActivity).supportActionBar?.show()
 
     }
 

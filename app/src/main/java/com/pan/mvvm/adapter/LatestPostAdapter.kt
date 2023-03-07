@@ -2,9 +2,11 @@ package com.pan.mvvm.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.pan.mvvm.databinding.LatestpostRowBinding
+import com.pan.mvvm.fragments.MainFragmentDirections
 import com.pan.mvvm.models.LatestPostItem
 
 class LatestPostAdapter : RecyclerView.Adapter<LatestPostAdapter.MyViewHolder>() {
@@ -25,15 +27,22 @@ class LatestPostAdapter : RecyclerView.Adapter<LatestPostAdapter.MyViewHolder>()
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val latestPostItem = latestPostList[position]
-        holder.binding.latestUserName.text = latestPostItem.username
-        holder.binding.latestDescription.text = latestPostItem.description
-        holder.binding.timeCreate.text = latestPostItem.createdAt.substring(0, 10)
-        Glide.with(holder.itemView.context).load(latestPostItem.userprofile)
+        val latestPostList = latestPostList[position]
+        holder.binding.latestUserName.text = latestPostList.username
+        holder.binding.latestDescription.text = latestPostList.description
+        holder.binding.timeCreate.text = latestPostList.createdAt.substring(0, 10)
+        Glide.with(holder.itemView.context).load(latestPostList.userprofile)
             .into(holder.binding.latestProfile)
 
-        Glide.with(holder.itemView.context).load(latestPostItem.files[0].filePath)
+        Glide.with(holder.itemView.context).load(latestPostList.files[0].filePath)
             .into(holder.binding.latestBackgroundImage)
+
+
+        holder.binding.root.setOnClickListener {
+            val action=MainFragmentDirections.actionMainFragmentToLatestPostDetailFragment(latestPostList)
+            holder.itemView.findNavController().navigate(action)
+        }
+
     }
 
     override fun getItemCount(): Int = latestPostList.size
