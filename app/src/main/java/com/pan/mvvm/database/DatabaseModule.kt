@@ -1,10 +1,8 @@
+/*
 package com.pan.mvvm.database
 
 import android.content.Context
 import androidx.room.Room
-import androidx.room.TypeConverters
-import com.pan.mvvm.database.converter.PopularTypeConverter
-import com.pan.mvvm.utils.Constants.POPULAR_TABLE
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,7 +14,6 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-@TypeConverters(PopularTypeConverter::class)
 object DatabaseModule {
 
     @Singleton
@@ -31,3 +28,4 @@ object DatabaseModule {
     fun provideDao(database: PopularPostDatabase) = database.getPopularPostDao()
 }
 
+*/

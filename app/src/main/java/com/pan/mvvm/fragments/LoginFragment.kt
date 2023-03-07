@@ -82,6 +82,7 @@ class LoginFragment : Fragment() {
                 is NetworkResult.Success -> {
                     //save token if login successful
                     tokenManager.saveToken(it.data!!.token)
+                    tokenManager.saveId(it.data.id)
 
                     Toast.makeText(requireContext(), "Login success", Toast.LENGTH_SHORT).show()
                     findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
@@ -97,6 +98,10 @@ class LoginFragment : Fragment() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        (activity as AppCompatActivity).supportActionBar?.hide()
+    }
 
     override fun onResume() {
         super.onResume()
@@ -110,7 +115,7 @@ class LoginFragment : Fragment() {
 
     }
 
-   override fun onDestroyView() {
+    override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }

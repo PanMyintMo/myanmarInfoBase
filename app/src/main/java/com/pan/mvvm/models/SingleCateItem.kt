@@ -2,14 +2,12 @@ package com.pan.mvvm.models
 
 import android.os.Parcelable
 import androidx.annotation.Keep
-import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
-
 @Keep
 @Parcelize
-data class  PopularItem(
+data class SingleCateItem(
     @SerializedName("cateId")
     val cateId: String,
     @SerializedName("cateName")
@@ -19,7 +17,7 @@ data class  PopularItem(
     @SerializedName("description")
     val description: String,
     @SerializedName("files")
-    val files: List<FileX>,
+    val files: List<SingleCateItems>,
     @SerializedName("_id")
     val id: String,
     @SerializedName("postAccept")
@@ -39,5 +37,5 @@ data class  PopularItem(
     @SerializedName("__v")
     val v: Int,
     @SerializedName("viewcount")
-    val viewcount: Double
+    var viewcount: Double
 ) : Parcelable

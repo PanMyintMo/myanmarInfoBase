@@ -1,3 +1,4 @@
+/*
 package com.pan.mvvm.database.converter
 
 import androidx.room.ProvidedTypeConverter
@@ -40,4 +41,4 @@ class PopularTypeConverter {
         val listType = object : TypeToken<List<FileX>>() {}.type
         return gson.fromJson(data, listType)
     }
-}
+}*/

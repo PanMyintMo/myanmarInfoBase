@@ -1,91 +1,72 @@
 package com.pan.mvvm.viewModel
 
-
-import android.app.Application
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
-import androidx.annotation.RequiresApi
+import android.util.Log
 import androidx.lifecycle.*
-import com.pan.mvvm.database.PopularPostEntity
-import com.pan.mvvm.models.PopularItem
 import com.pan.mvvm.repository.MyanfobaseRepository
-import com.pan.mvvm.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
+import okhttp3.RequestBody
+import java.io.File
 import javax.inject.Inject
 
-//@HiltViewModel
+
+@HiltViewModel
 class MyanfobaseViewModel @Inject constructor(
-    private val repository: MyanfobaseRepository,
-    application: Application
-) :
-    AndroidViewModel(application) {
-    /**Retrofit*/
+    private val myanfobaseRepository: MyanfobaseRepository
+) : ViewModel() {
 
-    private val _getPopularLiveData = MutableLiveData<NetworkResult<List<PopularItem>>>()
-    val getPopularItem: LiveData<NetworkResult<List<PopularItem>>>
-        get() = _getPopularLiveData
+    //get update user profile detail
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    suspend fun getAllPopularPost() {
-        _getPopularLiveData.postValue(NetworkResult.Loading())
-
-        if (hasInternetConnection()) {
-            val response = repository.remote.getPopular()
-            if (response.isSuccessful && response.body() != null) {
-                val popularResponse = NetworkResult.Success(response.body()!!)
-                val popularData = popularResponse.data
-                _getPopularLiveData.postValue(popularResponse)
-
-                if (popularData != null) {
-                    for (i in popularData.iterator()) {
-                        offlineCachePopularPostItem(i)
-                    }
-                }
+    val updateUserProfileDetail get() = myanfobaseRepository.updateProfileDetailResponse
+    fun updateUserProfileDetail(
+        id: String,
+        profilePicture: File,
+        username: RequestBody,
+        email: RequestBody,
+        dob: RequestBody,
+        gender: RequestBody,
+        address: RequestBody,
+        bio: RequestBody
+    ) {
+        viewModelScope.launch {
+            try {
+                myanfobaseRepository.updateProfileDetail(
+                    id,
+                    profilePicture,
+                    username,
+                    email,
+                    dob,
+                    gender,
+                    address,
+                    bio
+                )
+            } catch (e: Exception) {
+                Log.d("Error", e.message.toString())
             }
         }
     }
 
-    //Room
-    private fun offlineCachePopularPostItem(popularItem: PopularItem) {
-        val popularPostEntity = PopularPostEntity(popularItem)
-        insertPopularPostItem(popularPostEntity)
-    }
-    private fun insertPopularPostItem(popularPostEntity: PopularPostEntity) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.local.insertPopularItem(popularPostEntity)
+
+    //get UserLoginDetailResponse
+    val getLoginDetailResponseLiveData get() = myanfobaseRepository.userLoginDetail
+
+    fun getUserLoginDetailResponse(id: String) {
+        viewModelScope.launch {
+            myanfobaseRepository.getUserLoginDetailResponse(id)
         }
     }
 
-    //To check internet connection
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun hasInternetConnection(): Boolean {
-        val connectivityManager =
-            getApplication<Application>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork = connectivityManager.activeNetwork ?: return false
-        val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
-        return when {
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-            else -> false
+
+    //get SingleCategory Items
+
+    val getAllCategorySingleLiveData get() = myanfobaseRepository.getSingleCateItem
+    fun getSingleCateItem(cateName: String) {
+        viewModelScope.launch {
+            myanfobaseRepository.getSingleCateItem(cateName)
         }
     }
-}
 
 
-/*
-@HiltViewModel
-class MyanfobaseViewModel @Inject constructor(
-    private val myanfobaseRepository: MyanfobaseRepository
-) :
-    ViewModel() {
-    */
-/**Retrofit*//*
     //get CategoryName
     val getAllCategoryLiveData get() = myanfobaseRepository.getAllCategoryItem
     fun getAllCategoryItem() {
@@ -93,6 +74,7 @@ class MyanfobaseViewModel @Inject constructor(
             myanfobaseRepository.getAllCateName()
         }
     }
+
     //getPopularPostItem
     val getAllPopuplarPostItemLiveData get() = myanfobaseRepository.getPopularItem
     fun getAllPopularPostItem() {
@@ -100,6 +82,7 @@ class MyanfobaseViewModel @Inject constructor(
             myanfobaseRepository.getAllPopularPost()
         }
     }
+
     //getLatestPostItem
     val getAllLatestPostLiveData get() = myanfobaseRepository.getLatestPostItem
     fun getLatestPostItem() {
@@ -107,12 +90,6 @@ class MyanfobaseViewModel @Inject constructor(
             myanfobaseRepository.getLatestPostItem()
         }
     }
-    */
-/**Room Database*//*
-    //insert popularpost item
-    fun insertPopularPostItem(popularPostEntity: PopularPostEntity) {
-        viewModelScope.launch(Dispatchers.IO) {
-            myanfobaseRepository.insertPopularPostItem(popularPostEntity)
-        }
-    }
-}*/
+}
+
+

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/singleImageProfile"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:padding="2dp"
+        android:src="@drawable/umbrella"
+        android:theme="@style/userImageShape"
+        app:strokeWidth="2dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/cate_UserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/user_name"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/singleImageProfile"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewOption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:text="12"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.911"
+        app:layout_constraintStart_toEndOf="@+id/cate_UserName"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RtlHardcoded">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/post_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Posted Date"
+        app:layout_constraintEnd_toEndOf="@+id/cate_UserName"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/cate_UserName"
+        app:layout_constraintTop_toBottomOf="@+id/cate_UserName" />
+
+    <TextView
+        android:id="@+id/cateTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:padding="5dp"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/post_date"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="0dp">
+
+    </TextView>
+
+    <kr.co.prnd.readmore.ReadMoreTextView
+        android:id="@+id/cate_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_marginTop="16dp"
+        android:foreground="?attr/selectableItemBackground"
+        app:layout_constraintTop_toBottomOf="@+id/cateTitle"
+        app:readMoreColor="@color/purple_200"
+        app:readMoreMaxLine="4"
+        app:readMoreText="...ReadMore"
+        tools:layout_editor_absoluteX="0dp"
+        tools:targetApi="m">
+
+    </kr.co.prnd.readmore.ReadMoreTextView>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        app:layout_constraintTop_toBottomOf="@+id/cate_description"
+        android:layout_width="match_parent"
+        app:layout_constraintBottom_toBottomOf="@+id/linOne"
+        android:layout_height="wrap_content">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:id="@+id/slider"
+            android:layout_height="wrap_content">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+
+
+        <!-- <com.smarteist.autoimageslider.SliderView
+             android:id="@+id/slider"
+             android:layout_width="wrap_content"
+             android:layout_height="150dp"
+             app:sliderAnimationDuration="600"
+             app:sliderAutoCycleDirection="back_and_forth"
+             app:sliderIndicatorAnimationDuration="600"
+             app:sliderIndicatorEnabled="true"
+             app:sliderIndicatorGravity="center_horizontal|bottom"
+             app:sliderIndicatorMargin="15dp"
+             app:sliderIndicatorOrientation="horizontal"
+             app:sliderIndicatorPadding="3dp"
+             app:sliderIndicatorRadius="2dp"
+             app:sliderIndicatorSelectedColor="#5A5A5A"
+
+             app:sliderIndicatorUnselectedColor="#FFF"
+             app:sliderScrollTimeInSec="1"
+             tools:ignore="MissingClass,MissingConstraints" />
+     -->
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linOne"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
+        tools:layout_editor_absoluteX="0dp">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:src="@drawable/ic_favorite">
+
+        </ImageView>
+
+        <TextView
+            android:id="@+id/favoriteText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="0">
+
+        </TextView>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:src="@drawable/ic_viewer">
+
+        </ImageView>
+
+        <TextView
+            android:id="@+id/vCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/view_count">
+
+        </TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/view">
+
+        </TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linOne">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnFavorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/ic_favorite"
+            android:padding="5dp"
+            android:text="Favorite">
+
+        </com.google.android.material.button.MaterialButton>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/ic_share"
+            android:padding="5dp"
+            android:text="@string/share">
+
+        </com.google.android.material.button.MaterialButton>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

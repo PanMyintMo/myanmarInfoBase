@@ -15,12 +15,13 @@ class PopularPostImageAdapter(
     private var popularImageList: List<FileX>
 ) : RecyclerView.Adapter<PopularPostImageAdapter.MyImageDetailHolder>() {
     class MyImageDetailHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         val binding = PopularPostdetailImageRowBinding.bind(itemView)
 
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyImageDetailHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.popular_postdetail_image_row, parent, false)
+        val view = LayoutInflater.from(context)
+            .inflate(R.layout.popular_postdetail_image_row, parent, false)
 
         return MyImageDetailHolder(view)
     }
@@ -30,5 +31,5 @@ class PopularPostImageAdapter(
         Glide.with(context).load(imageList.filePath).into(holder.binding.detailImage)
     }
 
-    override fun getItemCount(): Int =popularImageList.size
+    override fun getItemCount(): Int = popularImageList.size
 }

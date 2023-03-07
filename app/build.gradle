@@ -53,8 +53,6 @@ dependencies {
     //Navigation Fragment
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
-    //implementation 'androidx.fragment:fragment-ktx:1.5.5'
-
 
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.13.2'
@@ -66,12 +64,12 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:2.5.0"
     //lifecycle
     //viewModel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0-beta01")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0-rc01")
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.0-beta01")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.0-rc01")
     //Coroutine Scope
     implementation('org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4')
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-beta01")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-rc01")
 
     //retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -90,16 +88,6 @@ dependencies {
     //dagger hilt
     implementation("com.google.dagger:hilt-android:2.38.1")
     kapt("com.google.dagger:hilt-android-compiler:2.38.1")
-
-/*    //dagger
-    implementation "com.google.dagger:dagger:2.38.1"
-    kapt("com.google.dagger:dagger-compiler:2.38.1")
-    annotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.38.1'*/
-    //Data store preference
-/*    implementation("androidx.datastore:datastore-preferences:1.0.0")
-    implementation("androidx.datastore:datastore:1.0.0")*/
-
 
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
    // implementation fileTree(include :['*.jar'], dir: 'libs')

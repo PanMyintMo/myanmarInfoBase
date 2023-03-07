@@ -1,22 +1,22 @@
+/*
 package com.pan.mvvm.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import com.pan.mvvm.database.converter.PopularTypeConverter
+
 import com.pan.mvvm.database.dao.PopularPostDao
-import com.pan.mvvm.models.PopularItem
-import javax.inject.Inject
+import com.pan.mvvm.models.PopularItemEntity
 
 @Database(
-    entities = [PopularPostEntity::class],
+    entities = [PopularItemEntity::class],
     version = 1,
     exportSchema = false
 )
-@TypeConverters(PopularTypeConverter::class)
+//@TypeConverters(PopularTypeConverter::class)
 abstract class PopularPostDatabase: RoomDatabase() {
     abstract fun getPopularPostDao(): PopularPostDao
 
+*/
 /*    companion object {
           @Volatile
           private var INSTANCE: PopularPostDatabase? = null
@@ -34,5 +34,6 @@ abstract class PopularPostDatabase: RoomDatabase() {
               }
               return INSTANCE!!
           }
-      }*/
-}
+      }*//*
+
+}*/

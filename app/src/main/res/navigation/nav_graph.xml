@@ -71,8 +71,9 @@
         <action
             android:id="@+id/action_latestPostDetailFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
+
         <argument
-            android:name="latestPostArgs"
+            android:name="latestArgs"
             app:argType="com.pan.mvvm.models.LatestPostItem" />
     </fragment>
 

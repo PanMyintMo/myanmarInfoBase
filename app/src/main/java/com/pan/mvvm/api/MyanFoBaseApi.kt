@@ -1,8 +1,8 @@
 package com.pan.mvvm.api
 
-import com.pan.mvvm.models.CategoryItem
-import com.pan.mvvm.models.LatestPostItem
-import com.pan.mvvm.models.PopularItem
+import com.pan.mvvm.models.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -18,18 +18,34 @@ interface MyanFoBaseApi {
     suspend fun getLatestPost(): Response<List<LatestPostItem>>
 
 
+    @GET("postcate/{cate}")
+    suspend fun getSingleCate(@Path("cate") cate: String): Response<List<SingleCateItem>>
+
+    @GET("users/detail/{id}")
+    suspend fun getUserLoginDetail(@Path("id") id: String): Response<UserLoginDetailResponse>
+
+
+
+    @Multipart
+    @PUT("users/update/{id}")
+    suspend fun updateProfileDetail(
+        @Path("id") id: String,
+        @Part profilePicture: MultipartBody.Part,
+        @Part("username") username: RequestBody,
+        @Part("email") email: RequestBody,
+        @Part("dob") dob: RequestBody,
+        @Part("gender") gender: RequestBody,
+        @Part("address") address: RequestBody,
+        @Part("bio") bio: RequestBody
+    ): Response<ProfileResponse>
+
+
+
     /* @GET("post")
      fun getPost(): Call<List<AllPostModelItem>>
 
      @GET("latest")
      fun getCurrency(): Call<Currency>
-
-  @GET("users/detail/{id}")
-     fun getUserDetail(@Path("id") id: String): Call<UserDetailResponseClass>
-
-     @GET("postcate/{cate}")
-     fun getSingleCate(@Path("cate") cate: String): Response<SingleCateItem>
-
 
      @Headers("Content-Type:application/json")
      @POST("addFav")
