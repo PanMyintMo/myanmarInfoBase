@@ -52,4 +52,12 @@
     <string name="password">Password</string>
     <string name="logout">Logout</string>
     <string name="my_profile">My Profile</string>
+    <string name="profile_detail">Profile Detail</string>
+    <string name="name">Name</string>
+    <string name="address">Address</string>
+    <string name="other">Other</string>
+    <string name="gender">Gender</string>
+    <string name="date_of_birth">Date Of Birth</string>
+    <string name="update_profile">Update Profile</string>
+    <string name="mgmg_gmail_com">mgmg@gmail.com</string>
 </resources>

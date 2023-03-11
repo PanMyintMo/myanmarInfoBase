@@ -1,6 +1,7 @@
 package com.pan.mvvm.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -40,6 +41,8 @@ class RegisterFragment : Fragment() {
 
 
         if (tokenManager.getToken() != null){
+
+            Log.d("TOKEN", tokenManager.getToken()!!)
             findNavController().navigate(R.id.action_registerFragment_to_mainFragment)
         }
         binding.btnSignUp.setOnClickListener {
@@ -53,7 +56,6 @@ class RegisterFragment : Fragment() {
             else{
                 binding.txtError.text=validationResult.second
             }
-            //  findNavController().navigate(R.id.action_registerFragment_to_mainFragment)
         }
 
 
@@ -76,8 +78,6 @@ class RegisterFragment : Fragment() {
 
     private fun checkDetailRegister(): Pair<Boolean, String> {
 
-    //    val confirmPass = binding.txtConfirmPassword.text.toString()
-
         val userRequestModel = getUserRequest()
 
         return authViewModel.validateCredentials(
@@ -86,31 +86,7 @@ class RegisterFragment : Fragment() {
             userRequestModel.password
         )
 
-/*        if (TextUtils.isEmpty(username)) {
-            binding.txtUserName.error = "Name is required"
-            binding.txtUserName.requestFocus()
-        } else if (TextUtils.isEmpty(email)) {
-            binding.txtEmail.error = "Email is required"
-            binding.txtEmail.requestFocus()
-        } else if (TextUtils.isEmpty(pass)) {
-            binding.txtPassword.error = "Password is required"
-            binding.txtPassword.requestFocus()
-        } else if (TextUtils.isEmpty(confirmPass)) {
-            binding.txtConfirmPassword.error = "Confirm Password is required"
-            binding.txtConfirmPassword.requestFocus()
-        } else {
-            if (pass != confirmPass) {
-                Toast.makeText(
-                    requireContext(),
-                    "Password are not matched",
-                    Toast.LENGTH_SHORT
-                ).show()
-                binding.txtPassword.requestFocus()
-                binding.txtConfirmPassword.requestFocus()
-            } else {
-                setupRegister(username, email, pass)
-            }
-        }*/
+
     }
 
     private fun bindObservers() {

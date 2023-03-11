@@ -1,11 +1,8 @@
 package com.pan.mvvm.repository
 
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.gson.Gson
 import com.pan.mvvm.api.MyanFoBaseApi
 import com.pan.mvvm.models.*
 import com.pan.mvvm.utils.NetworkResult
@@ -13,6 +10,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import org.json.JSONException
 import org.json.JSONObject
 import java.io.File
 import javax.inject.Inject
@@ -35,10 +33,67 @@ class MyanfobaseRepository @Inject constructor(
             else -> false
         }
     }*/
+
+    //favorite check is already true or not
+
+    private val _checkFavoriteLiveData = MutableLiveData<NetworkResult<FavoriteCheckResponse>>()
+    val favoriteCheckResponse: LiveData<NetworkResult<FavoriteCheckResponse>>
+        get() = _checkFavoriteLiveData
+
+    suspend fun checkFavoritePost(favoriteCheck: FavoriteCheck) {
+        _checkFavoriteLiveData.postValue(NetworkResult.Loading())
+        val response = myanFoBaseApi.checkFavoritePost(favoriteCheck)
+
+        if (response.isSuccessful && response.body() != null) {
+            _checkFavoriteLiveData.postValue(NetworkResult.Success(response.body()!!))
+        } else if (response.errorBody() != null) {
+            val errorText = response.errorBody()!!.charStream().readText()
+            val errorMessage = try {
+                JSONObject(errorText).getString("message")
+            } catch (e: JSONException) {
+                errorText
+            }
+            _checkFavoriteLiveData.postValue(NetworkResult.Error(errorMessage))
+        } else {
+            _checkFavoriteLiveData.postValue(NetworkResult.Error("Something went wrong"))
+        }
+
+    }
+
+
+    //for favorite
+    private val _favoriteLiveData = MutableLiveData<NetworkResult<FavoriteResponse>>()
+    val favoriteResponse: LiveData<NetworkResult<FavoriteResponse>>
+        get() = _favoriteLiveData
+
+
+    suspend fun addToFavorite(favoriteRequestModel: FavoriteRequestModel) {
+
+        _favoriteLiveData.postValue(NetworkResult.Loading())
+        val response = myanFoBaseApi.addToFavoritePost(favoriteRequestModel)
+
+        if (response.isSuccessful && response.body() != null) {
+            _favoriteLiveData.postValue(NetworkResult.Success(response.body()!!))
+        } else if (response.errorBody() != null) {
+            val errorText = response.errorBody()!!.charStream().readText()
+            val errorMessage = try {
+                JSONObject(errorText).getString("message")
+            } catch (e: JSONException) {
+                errorText
+            }
+            _favoriteLiveData.postValue(NetworkResult.Error(errorMessage))
+        } else {
+            _favoriteLiveData.postValue(NetworkResult.Error("Something went wrong"))
+        }
+
+    }
+
+
+    //put update user profile detail
     private val _updateProfileDetailResponseLiveData =
         MutableLiveData<NetworkResult<ProfileResponse>>()
-    val updateProfileDetailResponse: LiveData <NetworkResult<ProfileResponse>>
-        get() =_updateProfileDetailResponseLiveData
+    val updateProfileDetailResponse: LiveData<NetworkResult<ProfileResponse>>
+        get() = _updateProfileDetailResponseLiveData
 
     suspend fun updateProfileDetail(
         id: String,
@@ -51,65 +106,38 @@ class MyanfobaseRepository @Inject constructor(
         bio: RequestBody
     ) {
         val profilePictureRequestBody = profilePicture
-            .asRequestBody("multipart/form-data".toMediaTypeOrNull())
+            .asRequestBody("image/jpg".toMediaTypeOrNull())
         //MultiplePartBody.Part is used to send also the actual file
         val profilePicturePart = MultipartBody.Part.createFormData(
             "profilePicture",
             profilePicture.name,
             profilePictureRequestBody
         )
+
         _updateProfileDetailResponseLiveData.postValue(NetworkResult.Loading())
 
-        val response=myanFoBaseApi.updateProfileDetail(id,
-            profilePicturePart,username,email,dob,gender,address,bio)
-        val responseBody=response.body().toString()
-        Log.d("API_RESPONSE", responseBody)
+        val response = myanFoBaseApi.updateProfileDetail(
+            id,
+            profilePicturePart, username, email, dob, gender, address, bio
+        )
+        val responseBody = response.body().toString()
+        // Log.d("API_RESPONSE", responseBody)
 
-        if (response.isSuccessful && response.body() != null){
+        if (response.isSuccessful && response.body() != null) {
             _updateProfileDetailResponseLiveData.postValue(NetworkResult.Success(response.body()!!))
-        }
-        else if (response.errorBody() != null) {
-            val errorObj = JSONObject(response.errorBody()!!.charStream().readText())
-            _updateProfileDetailResponseLiveData.postValue(NetworkResult.Error(errorObj.getString("message")))
+        } else if (response.errorBody() != null) {
+            val errorText = response.errorBody()!!.charStream().readText()
+            val errorMessage = try {
+                JSONObject(errorText).getString("message")
+            } catch (e: JSONException) {
+                errorText
+            }
+            _updateProfileDetailResponseLiveData.postValue(NetworkResult.Error(errorMessage))
         } else {
             _updateProfileDetailResponseLiveData.postValue(NetworkResult.Error("Something went wrong"))
         }
     }
 
-    //put update user profile detail
-
-    /*private val _profileDetail = MutableLiveData<ProfileDetailResponse>()
-    val profileDetailLiveData: LiveData<ProfileDetailResponse>
-        get() = _profileDetail
-
-     suspend fun updateUserProfileDetail(
-         id: String,
-         requestProfileDetail: RequestProfileDetail,
-         imageFile: File
-     ) {
-
-         val profilePictureRequestBody = RequestBody.create(
-             "multipart/form-data".toMediaTypeOrNull(),
-             imageFile
-         )
-         //MultiplePartBody.Part is used to send also the actual file
-         val profilePicturePart = MultipartBody.Part.createFormData(
-             "profilePicture",
-             imageFile.name,
-             profilePictureRequestBody
-         )
-         val response = myanFoBaseApi.updateProfileDetail(
-             id,
-             profilePictureRequestBody,
-             profilePicturePart,
-             requestProfileDetail
-         )
-
-         if (response.isSuccessful && response.body() != null) {
-             _profileDetail.postValue(response.body()!!)
-         }
-     }
-*/
 
     //getUserLoginDetail
     private val _userLoginDetail = MutableLiveData<UserLoginDetailResponse>()
@@ -122,7 +150,6 @@ class MyanfobaseRepository @Inject constructor(
             _userLoginDetail.postValue(response.body()!!)
         }
     }
-
 
     //getCategoryName
     private val _getAllCategoryLiveData = MutableLiveData<NetworkResult<List<CategoryItem>>>()

@@ -8,11 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.pan.mvvm.R
 import com.pan.mvvm.databinding.PopularPostdetailImageRowBinding
-import com.pan.mvvm.models.FileX
+import com.pan.mvvm.models.ProfilePicture
 
 class PopularPostImageAdapter(
     private var context: Context,
-    private var popularImageList: List<FileX>
+    private var popularImageList: List<ProfilePicture>
 ) : RecyclerView.Adapter<PopularPostImageAdapter.MyImageDetailHolder>() {
     class MyImageDetailHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = PopularPostdetailImageRowBinding.bind(itemView)

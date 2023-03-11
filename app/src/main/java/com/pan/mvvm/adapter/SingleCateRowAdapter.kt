@@ -5,13 +5,19 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.pan.mvvm.R
 import com.pan.mvvm.databinding.SingleCategoryRowItemBinding
+import com.pan.mvvm.models.FavoriteRequestModel
 import com.pan.mvvm.models.SingleCateItem
 
-class SingleCateRowAdapter : RecyclerView.Adapter<SingleCateRowAdapter.SingleCateRowViewHolder>() {
+class SingleCateRowAdapter(private val listener: OnClickListener) :
+    RecyclerView.Adapter<SingleCateRowAdapter.SingleCateRowViewHolder>() {
 
     private var singleCateItemList = emptyList<SingleCateItem>()
     private lateinit var singleCategoryImageAdapter: SingleCategoryImageAdapter
+
+
+
 
 
     fun setLatestPostItem(singleCateItemList: List<SingleCateItem>) {
@@ -34,9 +40,33 @@ class SingleCateRowAdapter : RecyclerView.Adapter<SingleCateRowAdapter.SingleCat
         val singleCate = singleCateItemList[position]
         holder.binding.cateTitle.text = singleCate.title
         holder.binding.cateUserName.text = singleCate.username
-        holder.binding.postDate.text=singleCate.createdAt.substring(0,10)
+        holder.binding.postDate.text = singleCate.createdAt.substring(0, 10)
         holder.binding.cateDescription.text = singleCate.description
         holder.binding.vCount.text = singleCate.viewcount.toString()
+
+
+
+
+        holder.binding.btnFavorite.setOnClickListener {
+            listener.viewModelOnClick(
+                position,
+                favoriteRequestModel =
+                FavoriteRequestModel(
+                    singleCate.id,
+                    singleCate.username,
+                    singleCate.title,
+                    singleCate.cateId,
+                    singleCate.cateName,
+                    singleCate.files.toString()
+                )
+            )
+            // Change background color of the favorite button to red
+
+
+            holder.binding.favorite.setColorFilter(R.drawable.ic_red_favorite)
+            holder.binding.btnFavorite.setBackgroundColor(R.color.green)
+        }
+
         Glide.with(holder.itemView.context).load(singleCate.userprofile)
             .into(holder.binding.singleImageProfile)
 
@@ -49,4 +79,15 @@ class SingleCateRowAdapter : RecyclerView.Adapter<SingleCateRowAdapter.SingleCat
     }
 
     override fun getItemCount(): Int = singleCateItemList.size
+
+
+    interface OnClickListener {
+        fun viewModelOnClick(position: Int, favoriteRequestModel: FavoriteRequestModel)
+
+
+
+    }
+
 }
+
+

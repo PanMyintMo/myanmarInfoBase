@@ -10,13 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.pan.mvvm.R
 import com.pan.mvvm.adapter.SingleCateRowAdapter
 import com.pan.mvvm.databinding.ActivitySingleCategoryBinding
+import com.pan.mvvm.models.FavoriteRequestModel
 import com.pan.mvvm.utils.NetworkResult
 import com.pan.mvvm.viewModel.MyanfobaseViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class SingleCategoryActivity : AppCompatActivity() {
+class SingleCategoryActivity : AppCompatActivity(), SingleCateRowAdapter.OnClickListener {
 
     companion object {
         const val CAT_KEY = "cat_key"
@@ -24,7 +25,7 @@ class SingleCategoryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySingleCategoryBinding
     private val myanfobaseViewModel by viewModels<MyanfobaseViewModel>()
-    private var singleCateRowAdapter: SingleCateRowAdapter?= null
+    private var singleCateRowAdapter: SingleCateRowAdapter? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,24 +49,25 @@ class SingleCategoryActivity : AppCompatActivity() {
         myanfobaseViewModel.getSingleCateItem(cateName.toString())
 
         // Initialize adapter
-        singleCateRowAdapter = SingleCateRowAdapter()
+        singleCateRowAdapter = SingleCateRowAdapter(this)
 
         fetchSingleCateItem()
+
 
     }
 
     private fun fetchSingleCateItem() {
 
-        myanfobaseViewModel.getAllCategorySingleLiveData.observe(this){response ->
-           // binding.progressBar.isVisible = false
+        myanfobaseViewModel.getAllCategorySingleLiveData.observe(this) { response ->
+            // binding.progressBar.isVisible = false
 
             when (response) {
                 is NetworkResult.Success -> {
                     val singleCateItemList = response.data
                     singleCateItemList?.let {
-                        binding.cateRowRecycler.layoutManager  =
+                        binding.cateRowRecycler.layoutManager =
                             LinearLayoutManager(
-                              this,
+                                this,
                                 LinearLayoutManager.VERTICAL,
                                 false
                             )
@@ -79,13 +81,11 @@ class SingleCategoryActivity : AppCompatActivity() {
 
                 }
                 is NetworkResult.Loading -> {
-                  //  binding.progressBar.isVisible = true
+                    //  binding.progressBar.isVisible = true
 
                 }
             }
         }
-
-
     }
 
 
@@ -97,5 +97,11 @@ class SingleCategoryActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun viewModelOnClick(position: Int, favoriteRequestModel: FavoriteRequestModel) {
+
+        myanfobaseViewModel.addToFavorite(favoriteRequestModel)
+
     }
 }

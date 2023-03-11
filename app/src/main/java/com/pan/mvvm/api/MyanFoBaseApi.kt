@@ -24,8 +24,6 @@ interface MyanFoBaseApi {
     @GET("users/detail/{id}")
     suspend fun getUserLoginDetail(@Path("id") id: String): Response<UserLoginDetailResponse>
 
-
-
     @Multipart
     @PUT("users/update/{id}")
     suspend fun updateProfileDetail(
@@ -40,6 +38,18 @@ interface MyanFoBaseApi {
     ): Response<ProfileResponse>
 
 
+    @Headers("Content-Type:application/json")
+    @POST("addFav")
+    suspend fun addToFavoritePost(
+        @Body addFavPost: FavoriteRequestModel
+    ): Response<FavoriteResponse>
+
+
+    @Headers("Content-Type:application/json")
+    @POST("checked")
+    fun checkFavoritePost(@Body favoriteCheck: FavoriteCheck):
+            Response<FavoriteCheckResponse>
+
 
     /* @GET("post")
      fun getPost(): Call<List<AllPostModelItem>>
@@ -48,19 +58,9 @@ interface MyanFoBaseApi {
      fun getCurrency(): Call<Currency>
 
      @Headers("Content-Type:application/json")
-     @POST("addFav")
-     fun addToFavoritePost(
-         @Header("Authorization") token: String,
-         @Body addFavPost: ResponseFavPost
-     ): Call<ResponseFavPost>
 
 
-     @Headers("Content-Type:application/json")
-     @POST("checked")
-     fun checkFavoritePost(
-         @Header("Authorization") token: String,
-         @Body checkFavorite: CheckFavorite
-     ): Call<ResponseClass>
+
 
 
      @Headers("Content-Type:application/json")

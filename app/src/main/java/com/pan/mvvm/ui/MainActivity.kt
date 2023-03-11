@@ -4,11 +4,13 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.pan.mvvm.R
 import com.pan.mvvm.databinding.ActivityMainBinding
@@ -64,7 +66,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.nav_profile -> {
 
-                    val intent= Intent(this@MainActivity,ProfileActivity::class.java)
+                    val intent = Intent(this@MainActivity, ProfileActivity::class.java)
                     startActivity(intent)
                 }
 
@@ -83,9 +85,12 @@ class MainActivity : AppCompatActivity() {
             val navHeader = navigationView.getHeaderView(0)
             val nvEmail = navHeader.findViewById(R.id.user_maile) as TextView
             val nvName = navHeader.findViewById(R.id.userName) as TextView
+            val navProfile=navHeader.findViewById(R.id.navProfile) as ImageView
+
             // for navigation header's email and user name
             nvEmail.text = userLoginDetailResponse.email
             nvName.text = userLoginDetailResponse.username
+            Glide.with(this).load( userLoginDetailResponse.profilePicture[0].filePath).into(navProfile)
 
         }
     }

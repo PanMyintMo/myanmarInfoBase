@@ -11,8 +11,8 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
+import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.gson.Gson
 import com.pan.mvvm.R
 import com.pan.mvvm.databinding.ActivityProfileBinding
 import com.pan.mvvm.models.ProfileResponse
@@ -23,7 +23,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import java.io.File
-
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -33,9 +32,10 @@ class ProfileActivity : AppCompatActivity() {
     private val myanfobaseViewModel by viewModels<MyanfobaseViewModel>()
     private lateinit var binding: ActivityProfileBinding
     private var gender: String? = null
-    var id: String? = null
-    var uri: Uri? = null
+    private var id: String? = null
+    private var uri: Uri? = null
 
+    // TOKEN MANAGER MUST BE INITIALIZED BEFORE ON_CREATE
     @Inject
     lateinit var tokenManager: TokenManager
 
@@ -49,16 +49,18 @@ class ProfileActivity : AppCompatActivity() {
             binding.editProfileScrollView.isVisible = true
             binding.profileScrollView.isVisible = false
 
-            initDataPicker()
-            // Check which radio button is selected
 
-            gender = when (binding.genderGroup.checkedRadioButtonId) {
-                R.id.maleButton -> "Male"
-                R.id.femaleButton -> "Female"
-                else -> ""
-            }
-            binding.genderText.text = "Selected gender: $gender"
         }
+
+        initDataPicker()
+        // Check which radio button is selected
+
+        gender = when (binding.genderGroup.checkedRadioButtonId) {
+            R.id.maleButton -> "Male"
+            R.id.femaleButton -> "Female"
+            else -> ""
+        }
+        binding.genderText.text = "Selected gender: $gender"
 
         binding.floatingAction.setOnClickListener {
             pickUpImage()
@@ -67,6 +69,42 @@ class ProfileActivity : AppCompatActivity() {
         binding.submit.setOnClickListener {
             checkProfileDetail()
         }
+
+        observeUserProfileDetail()
+
+        // observe existing profile details
+        myanfobaseViewModel.getLoginDetailResponseLiveData.observe(this) { userLoginDetailResponse ->
+            populateUserDetails(
+                ProfileResponse(
+                    address = userLoginDetailResponse.address,
+                    bio = userLoginDetailResponse.bio,
+                    dob = userLoginDetailResponse.dob,
+                    email = userLoginDetailResponse.email,
+                    gender = userLoginDetailResponse.gender,
+                    id = userLoginDetailResponse.id,
+                    isAdmin = userLoginDetailResponse.isAdmin,
+                    login = userLoginDetailResponse.login,
+                    profilePicture = userLoginDetailResponse.profilePicture,
+                    username = userLoginDetailResponse.username,
+                )
+            )
+        }
+
+        // read existing profile details
+        tokenManager.getId()
+            ?.let { userId -> myanfobaseViewModel.getUserLoginDetailResponse(userId) }
+
+    }
+
+    private fun populateUserDetails(profileResponse: ProfileResponse) {
+        val profileUrl = profileResponse.profilePicture[0].filePath
+        Glide.with(this).load(profileUrl).into(binding.postImageProfile)
+
+        binding.textUserName.text = profileResponse.username
+        binding.textEmail.text = profileResponse.email
+        binding.textAddress.text = profileResponse.address
+        binding.textBio.text = profileResponse.bio
+        binding.textGender.text = profileResponse.gender
 
     }
 
@@ -110,7 +148,7 @@ class ProfileActivity : AppCompatActivity() {
             Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show()
         } else {
 
-            observeUserProfileDetail()
+            updateProfile()
             binding.editProfileScrollView.isVisible = false
             binding.profileScrollView.isVisible = true
         }
@@ -118,31 +156,23 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun observeUserProfileDetail() {
+
         myanfobaseViewModel.updateUserProfileDetail.observe(this) { response ->
             when (response) {
                 is NetworkResult.Success -> {
 
+                    response.data?.let { populateUserDetails(it) }
 
-
-                    val profilePicture = response.data?.profilePicture?.get(0)?.filePath
-                    val username = response.data?.username
-                    val email = response.data?.email
-                    val dob = response.data?.dob
-                    val gender = response.data?.gender
-                    val bio = response.data?.bio
-
-
-                    binding.textUserName.text = username.toString()
-                    binding.textdob.text = bio.toString()
-                    binding.textEmail.text = email.toString()
-                    binding.textGender.text = gender.toString()
-
-                     Toast.makeText(this, "Profile Detail is Successful!1", Toast.LENGTH_SHORT)
-                         .show()
+                    Toast.makeText(this, "Profile Detail is Successful!1", Toast.LENGTH_SHORT)
+                        .show()
                 }
 
                 is NetworkResult.Error -> {
-                    Toast.makeText(this, response.message, Toast.LENGTH_SHORT).show()
+                    // Toast.makeText(this, response.message, Toast.LENGTH_SHORT).show()
+                    MaterialAlertDialogBuilder(this@ProfileActivity)
+                        .setMessage(response.message)
+                        .setPositiveButton(android.R.string.ok, null)
+                        .show()
                 }
                 is NetworkResult.Loading -> {
 
@@ -170,7 +200,7 @@ class ProfileActivity : AppCompatActivity() {
     private fun getPickedImages(data: Intent) {
 
         uri = data.data
-        val profileImage = if (uri != null) {
+        if (uri != null) {
             val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
             binding.postImage.setImageBitmap(bitmap)
             true
@@ -178,6 +208,9 @@ class ProfileActivity : AppCompatActivity() {
             false
         }
 
+    }
+
+    private fun updateProfile() {
         myanfobaseViewModel.updateUserProfileDetail(
             id.toString(),
             profilePicture = File(getRealPathFromURI(uri)),
@@ -186,9 +219,8 @@ class ProfileActivity : AppCompatActivity() {
             address = createPartFromString(binding.editAddress.text.toString()),
             dob = createPartFromString(binding.dob.text.toString()),
             gender = createPartFromString(gender.toString()),
-            bio = createPartFromString(binding.editBio.text.toString()))
-
-
+            bio = createPartFromString(binding.editBio.text.toString())
+        )
     }
 
     private fun createPartFromString(value: String): RequestBody {
@@ -213,26 +245,25 @@ class ProfileActivity : AppCompatActivity() {
     }
 
 
-
     private fun initDataPicker() {
-    binding.datePickerButton.setOnClickListener {
-        //Get Current Date
-        val currentDate = Calendar.getInstance()
-        val year = currentDate.get(Calendar.YEAR)
-        val month = currentDate.get(Calendar.MONTH)
-        val day = currentDate.get(Calendar.DAY_OF_MONTH)
-        //Initialize DatePickerDialog
+        binding.datePickerButton.setOnClickListener {
+            //Get Current Date
+            val currentDate = Calendar.getInstance()
+            val year = currentDate.get(Calendar.YEAR)
+            val month = currentDate.get(Calendar.MONTH)
+            val day = currentDate.get(Calendar.DAY_OF_MONTH)
+            //Initialize DatePickerDialog
 
-        val datePickerDialog = DatePickerDialog(this, { _, year, month, dayOfMonth ->
-            // Do something with the selected date
-            val selectedDate = Calendar.getInstance()
-            selectedDate.set(year, month, dayOfMonth)
-            val formattedDate = SimpleDateFormat("MMM dd yyyy").format(selectedDate.time)
-            binding.dob.text = formattedDate
-        }, year, month, day)
+            val datePickerDialog = DatePickerDialog(this, { _, year, month, dayOfMonth ->
+                // Do something with the selected date
+                val selectedDate = Calendar.getInstance()
+                selectedDate.set(year, month, dayOfMonth)
+                val formattedDate = SimpleDateFormat("MMM dd yyyy").format(selectedDate.time)
+                binding.dob.text = formattedDate
+            }, year, month, day)
 
-        // Show DatePickerDialog
-        datePickerDialog.show()
+            // Show DatePickerDialog
+            datePickerDialog.show()
+        }
     }
-}
 }
