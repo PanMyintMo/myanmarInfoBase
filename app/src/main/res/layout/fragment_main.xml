@@ -16,7 +16,6 @@
               android:id="@+id/mainRecycler"
               android:layout_width="match_parent"
               android:layout_height="100dp"
-              android:background="@color/purple_200"
               android:orientation="horizontal"
               app:layout_constraintEnd_toEndOf="parent"
               app:layout_constraintHorizontal_bias="0.5"
@@ -30,12 +29,14 @@
           </View>
 
           <TextView
+              android:textColor="#1976d2"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_margin="10dp"
+              android:fontFamily="@font/alex_brush"
               android:text="@string/trending_post"
               android:textSize="25sp"
-              android:textStyle="bold">
+              android:textStyle="italic">
 
           </TextView>
 
@@ -60,12 +61,14 @@
           </View>
 
           <TextView
+              android:textColor="#1976d2"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_margin="10dp"
               android:text="@string/latest_post"
               android:textSize="25sp"
-              android:textStyle="bold">
+              android:fontFamily="@font/alex_brush"
+              android:textStyle="italic">
 
           </TextView>
 

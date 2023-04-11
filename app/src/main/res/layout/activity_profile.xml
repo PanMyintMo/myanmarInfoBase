@@ -9,217 +9,279 @@
     tools:context=".ui.ProfileActivity"
     tools:ignore="MissingClass">
 
-    <ScrollView
-        android:id="@+id/editProfileScrollView"
+
+    <LinearLayout
+        android:id="@+id/editProfileView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:visibility="gone">
 
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/profile_bk"
+                android:fitsSystemWindows="true"
+                app:expandedTitleMarginEnd="64dp"
+                app:expandedTitleTextAppearance="@style/TransparentText"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar_edit_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:layout_collapseMode="pin" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/alex_brush"
+                    android:text="Edit Profile"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/back_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableRight="@drawable/ic_arrow_back"
+                        android:background="@android:color/transparent"/>
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:id="@+id/edit_Profile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_check"
+                        android:background="@android:color/transparent"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:background="@color/light_gray"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0">
+
+            </View>
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/postImage"
+                style="@style/userImageShape"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:src="@drawable/ic_person"
+                android:theme="@style/userImageShape"
+                app:layout_constraintBottom_toBottomOf="@+id/view"
+                app:layout_constraintEnd_toEndOf="@+id/view"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/view"
+                app:strokeColor="@color/white"
+                app:strokeWidth="2dp"
+                tools:ignore="MissingConstraints">
+
+            </com.google.android.material.imageview.ShapeableImageView>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/floatingAction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="120dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/white"
+                android:src="@drawable/ic_edit"
+                app:layout_constraintBottom_toBottomOf="@+id/postImage"
+                app:layout_constraintEnd_toEndOf="@+id/view"
+                tools:ignore="MissingConstraints" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+           >
+
+            <EditText
+                android:id="@+id/editName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:padding="15dp"
+                android:hint="Please Enter Your Name"
+                android:imeOptions="actionNext"
+                android:textColorHint="@color/purple_200">
+
+            </EditText>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <EditText
+                android:id="@+id/editEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:padding="15dp"
+                android:hint="Please Enter Your Email"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"
+                android:textColorHint="@color/purple_200">
+
+            </EditText>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/editAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Your Address"
+                android:layout_margin="10dp"
+                android:padding="15dp"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"
+                android:textColorHint="@color/purple_200">
+
+            </EditText>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+          >
+
+            <EditText
+                android:id="@+id/editBio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Bio"
+                android:layout_margin="10dp"
+                android:padding="15dp"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"
+                android:textColorHint="@color/purple_200">
+
+            </EditText>
+        </com.google.android.material.textfield.TextInputLayout>
+
         <LinearLayout
+            android:layout_marginStart="10dp"
+            android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <TextView
+                android:id="@+id/genderText"
+                android:fontFamily="@font/alex_brush"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select your gender" />
+
+            <RadioGroup
+                android:id="@+id/genderGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <View
-                    android:id="@+id/view"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:background="@color/light_gray"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.0">
-
-                </View>
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/postImage"
-                    style="@style/userImageShape"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:src="@drawable/ic_person"
-                    android:theme="@style/userImageShape"
-                    app:layout_constraintEnd_toEndOf="@+id/view"
-                    app:layout_constraintHorizontal_bias="0.498"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:strokeColor="@color/white"
-                    app:strokeWidth="2dp"
-                    tools:ignore="MissingConstraints"
-                    tools:layout_editor_absoluteY="50dp">
-
-                </com.google.android.material.imageview.ShapeableImageView>
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/floatingAction"
+                <RadioButton
+                    android:id="@+id/maleButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="120dp"
-                    android:layout_marginBottom="100dp"
-                    android:backgroundTint="@color/white"
-                    android:src="@drawable/ic_edit"
-                    app:layout_constraintBottom_toBottomOf="@+id/postImage"
-                    app:layout_constraintEnd_toEndOf="@+id/view"
-                    tools:ignore="MissingConstraints" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:text="Male" />
 
+                <RadioButton
+                    android:id="@+id/femaleButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Female" />
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/dob"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Profile Detail"
+                android:layout_marginStart="15dp"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:padding="15dp"
+                android:text="Choose Date of Birth"
                 android:textStyle="bold">
 
             </TextView>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/datePickerButton"
+                style="?android:spinnerStyle"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:text="Jan 01 2020">
 
-                <EditText
-                    android:id="@+id/editName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Please Enter Your Name"
-                    android:imeOptions="actionNext"
-                    android:textColorHint="@color/purple_200">
-
-                </EditText>
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <EditText
-                    android:id="@+id/editEmail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Please Enter Your Email"
-                    android:imeOptions="actionNext"
-                    android:inputType="textEmailAddress"
-                    android:textColorHint="@color/purple_200">
-
-                </EditText>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <EditText
-                    android:id="@+id/editAddress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Enter Your Address"
-                    android:imeOptions="actionNext"
-                    android:inputType="textEmailAddress"
-                    android:textColorHint="@color/purple_200">
-
-                </EditText>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <EditText
-                    android:id="@+id/editBio"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Enter Bio"
-                    android:imeOptions="actionNext"
-                    android:inputType="textEmailAddress"
-                    android:textColorHint="@color/purple_200">
-
-                </EditText>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/genderText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Select your gender" />
-
-                <RadioGroup
-                    android:id="@+id/genderGroup"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <RadioButton
-                        android:id="@+id/maleButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Male" />
-
-                    <RadioButton
-                        android:id="@+id/femaleButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Female" />
-                </RadioGroup>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <TextView
-                    android:id="@+id/dob"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_weight="1"
-                    android:text="Choose Date of Birth"
-                    android:textStyle="bold">
-
-                </TextView>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/datePickerButton"
-                    style="?android:spinnerStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1"
-                    android:text="Jan 01 2020">
-
-                </com.google.android.material.button.MaterialButton>
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/submit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Submit" />
+            </com.google.android.material.button.MaterialButton>
         </LinearLayout>
-    </ScrollView>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+    </LinearLayout>
 
 
     <LinearLayout
         android:id="@+id/profileScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
@@ -230,8 +292,8 @@
                 android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/profile_bk"
                 android:fitsSystemWindows="true"
-                app:contentScrim="@color/colorPrimaryDark"
                 app:expandedTitleMarginEnd="64dp"
                 app:expandedTitleTextAppearance="@style/TransparentText"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
@@ -241,6 +303,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     app:layout_collapseMode="pin" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/alex_brush"
+                    android:text="Profile"
+                    android:textColor="@color/white"
+                    android:textSize="25sp">
+
+                </TextView>
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -254,7 +327,6 @@
             android:gravity="center_horizontal"
             android:orientation="vertical"
             app:layout_anchorGravity="center">
-
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/postImageProfile"
@@ -272,15 +344,15 @@
 
             <TextView
                 android:id="@+id/textEmail"
-                android:textStyle="italic"
-                android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:fontFamily="@font/alex_brush"
                 android:hint="@string/mgmg_gmail_com"
+                android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                android:textSize="15sp">
+                android:textSize="20sp">
 
             </TextView>
         </LinearLayout>
@@ -289,16 +361,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="20dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <TextView
-                android:textStyle="bold|italic"
                 android:id="@+id/profileDetail"
-                android:textColor="@color/design_default_color_primary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_margin="15dp"
+                android:fontFamily="@font/alex_brush"
                 android:text="@string/profile_detail"
+                android:textColor="#1976d2"
                 android:textSize="20sp" />
 
             <com.google.android.material.card.MaterialCardView
@@ -307,101 +381,48 @@
                 android:layout_margin="15dp"
                 android:padding="15dp">
 
+                <com.google.android.material.imageview.ShapeableImageView
+                    style="@style/userImageShape"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/ic_person"
+                    android:theme="@style/userImageShape"
+                    app:strokeColor="@color/white"
+                    app:strokeWidth="2dp">
 
-                <LinearLayout
+                </com.google.android.material.imageview.ShapeableImageView>
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginStart="80dp">
 
-                    <com.google.android.material.imageview.ShapeableImageView
-                        style="@style/userImageShape"
-                        android:layout_width="25dp"
-                        android:layout_height="19dp"
-                        android:layout_marginStart="20dp"
-                        android:src="@drawable/ic_person"
-                        android:theme="@style/userImageShape"
-                        app:strokeColor="@color/white"
-                        app:strokeWidth="2dp">
 
-                    </com.google.android.material.imageview.ShapeableImageView>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="50dp"
-                        android:orientation="vertical">
+                        android:fontFamily="@font/alex_brush"
+                        android:text="@string/name"
+                        android:textSize="18sp">
 
+                    </TextView>
 
-                        <TextView
-                            android:textSize="18sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/name">
-
-                        </TextView>
-
-                        <TextView
-                            android:id="@+id/textUserName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Aye Aye">
-
-                        </TextView>
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:padding="15dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        style="@style/userImageShape"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginStart="20dp"
-                        android:src="@drawable/ic_address"
-                        android:theme="@style/userImageShape"
-                        app:strokeColor="@color/white"
-                        app:strokeWidth="2dp">
-
-                    </com.google.android.material.imageview.ShapeableImageView>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/textUserName"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="50dp"
-                        android:orientation="vertical">
+                        android:layout_below="@+id/name"
+                        android:fontFamily="@font/alex_brush"
+                        android:text="Aye Aye"
+                        android:textSize="18sp">
+
+                    </TextView>
 
 
-                        <TextView
-                           android:textSize="18sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/address">
-
-                        </TextView>
-
-                        <TextView
-                            android:id="@+id/textAddress"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                           >
-
-                        </TextView>
-                    </LinearLayout>
-
-                </LinearLayout>
-
+                </RelativeLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -412,48 +433,46 @@
                 android:padding="15dp">
 
 
-                <LinearLayout
+                <com.google.android.material.imageview.ShapeableImageView
+                    style="@style/userImageShape"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/ic_address"
+                    android:theme="@style/userImageShape"
+                    app:strokeColor="@color/white"
+                    app:strokeWidth="2dp">
+
+                </com.google.android.material.imageview.ShapeableImageView>
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginStart="80dp">
 
-                    <com.google.android.material.imageview.ShapeableImageView
-                        style="@style/userImageShape"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginStart="20dp"
-                        android:src="@drawable/ic_person"
-                        android:theme="@style/userImageShape"
-                        app:strokeColor="@color/white"
-                        app:strokeWidth="2dp">
 
-                    </com.google.android.material.imageview.ShapeableImageView>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/txtAddress"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="50dp"
-                        android:orientation="vertical">
+                        android:fontFamily="@font/alex_brush"
+                        android:text="@string/address"
+                        android:textSize="18sp">
 
+                    </TextView>
 
-                        <TextView
+                    <TextView
+                        android:id="@+id/textAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txtAddress"
+                        android:fontFamily="@font/alex_brush"
+                        android:textSize="18sp">
 
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Bio">
+                    </TextView>
+                </RelativeLayout>
 
-                        </TextView>
-
-                        <TextView
-                            android:id="@+id/textBio"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Dancer">
-
-                        </TextView>
-                    </LinearLayout>
-
-                </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -464,48 +483,46 @@
                 android:padding="15dp">
 
 
-                <LinearLayout
+                <com.google.android.material.imageview.ShapeableImageView
+                    style="@style/userImageShape"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/ic_person"
+                    android:theme="@style/userImageShape"
+                    app:strokeColor="@color/white"
+                    app:strokeWidth="2dp">
+
+                </com.google.android.material.imageview.ShapeableImageView>
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginStart="80dp">
 
-                    <com.google.android.material.imageview.ShapeableImageView
-                        style="@style/userImageShape"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginStart="20dp"
-                        android:src="@drawable/ic_gender"
-                        android:theme="@style/userImageShape"
-                        app:strokeColor="@color/white"
-                        app:strokeWidth="2dp">
-
-                    </com.google.android.material.imageview.ShapeableImageView>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/txtBio"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="50dp"
-                        android:orientation="vertical">
+                        android:fontFamily="@font/alex_brush"
+                        android:text="Bio"
+                        android:textSize="18sp">
 
+                    </TextView>
 
-                        <TextView
-                            android:id="@+id/Gender"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/gender">
+                    <TextView
+                        android:id="@+id/textBio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txtBio"
+                        android:fontFamily="@font/alex_brush"
+                        android:text="Dancer"
+                        android:textSize="18sp">
 
-                        </TextView>
+                    </TextView>
+                </RelativeLayout>
 
-                        <TextView
-                            android:id="@+id/textGender"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/other">
-
-                        </TextView>
-                    </LinearLayout>
-
-                </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -516,59 +533,97 @@
                 android:padding="15dp">
 
 
-                <LinearLayout
+                <com.google.android.material.imageview.ShapeableImageView
+                    style="@style/userImageShape"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/ic_gender"
+                    android:theme="@style/userImageShape"
+                    app:strokeColor="@color/white"
+                    app:strokeWidth="2dp">
+
+                </com.google.android.material.imageview.ShapeableImageView>
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginStart="80dp">
 
-                    <com.google.android.material.imageview.ShapeableImageView
-                        style="@style/userImageShape"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginStart="20dp"
-                        android:src="@drawable/ic_date_of_birth"
-                        android:theme="@style/userImageShape"
-                        app:strokeColor="@color/white"
-                        app:strokeWidth="2dp">
 
-                    </com.google.android.material.imageview.ShapeableImageView>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/Gender"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="50dp"
-                        android:orientation="vertical">
+                        android:fontFamily="@font/alex_brush"
+                        android:text="@string/gender"
+                        android:textSize="18sp">
 
+                    </TextView>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/date_of_birth">
+                    <TextView
+                        android:id="@+id/textGender"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/Gender"
+                        android:fontFamily="@font/alex_brush"
+                        android:text="@string/other"
+                        android:textSize="18sp">
 
-                        </TextView>
+                    </TextView>
+                </RelativeLayout>
 
-                        <TextView
-                            android:id="@+id/textdob"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                           >
-
-                        </TextView>
-                    </LinearLayout>
-
-                </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
-            <Button
-                android:id="@+id/editProfile"
-                android:layout_width="wrap_content"
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/update_profile"
-                android:textAllCaps="false">
+                android:layout_margin="15dp"
+                android:padding="15dp">
 
-            </Button>
+                <com.google.android.material.imageview.ShapeableImageView
+                    style="@style/userImageShape"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/ic_date_of_birth"
+                    android:theme="@style/userImageShape"
+                    app:strokeColor="@color/white"
+                    app:strokeWidth="2dp">
+
+                </com.google.android.material.imageview.ShapeableImageView>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="80dp">
+
+
+                    <TextView
+                        android:id="@+id/txtDob"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/alex_brush"
+                        android:text="@string/date_of_birth"
+                        android:textSize="18sp">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/textdob"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txtDob">
+
+                    </TextView>
+                </RelativeLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
 
         </LinearLayout>
 

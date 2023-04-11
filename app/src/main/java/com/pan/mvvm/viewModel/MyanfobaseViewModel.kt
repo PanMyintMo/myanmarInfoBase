@@ -21,7 +21,7 @@ class MyanfobaseViewModel @Inject constructor(
     val checkFavoriteData get() = myanfobaseRepository.favoriteCheckResponse
     fun checkUserFavorite(favoriteCheck: FavoriteCheck) {
         viewModelScope.launch {
-            myanfobaseRepository.checkFavoritePost(favoriteCheck)
+            myanfobaseRepository.checkUserFavoritePost(favoriteCheck)
         }
     }
 
@@ -32,7 +32,27 @@ class MyanfobaseViewModel @Inject constructor(
             myanfobaseRepository.addToFavorite(favoriteRequestModel)
         }
     }
+    //create new post
+    val createNewPostResponseDetail get() = myanfobaseRepository.newPostResponse
+    fun createNewPost(
+        cateId: RequestBody,
+        cateName: RequestBody,
+        title: RequestBody,
+        description: RequestBody,
+        files: List<File>
+    ){
+        viewModelScope.launch {
+            try {
+                myanfobaseRepository.createNewPost(
+                    cateId,cateName,title,description,files
+                )
+            }
+            catch (e:Exception){
+                Log.d("Error", e.message.toString())
+            }
 
+        }
+    }
 
     //get update user profile detail
 
@@ -64,8 +84,6 @@ class MyanfobaseViewModel @Inject constructor(
             }
         }
     }
-
-
     //get UserLoginDetailResponse
     val getLoginDetailResponseLiveData get() = myanfobaseRepository.userLoginDetail
 
@@ -83,7 +101,6 @@ class MyanfobaseViewModel @Inject constructor(
             myanfobaseRepository.getSingleCateItem(cateName)
         }
     }
-
 
     //get CategoryName
     val getAllCategoryLiveData get() = myanfobaseRepository.getAllCategoryItem
@@ -108,8 +125,6 @@ class MyanfobaseViewModel @Inject constructor(
             myanfobaseRepository.getLatestPostItem()
         }
     }
-
-
 }
 
 

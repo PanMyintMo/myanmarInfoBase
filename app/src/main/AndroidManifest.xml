@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
@@ -22,26 +24,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MVVM"
         tools:targetApi="31">
+
         <activity
             android:name=".ui.ProfileActivity"
             android:exported="false"
             android:theme="@style/CategoryNoActionBar">
-            <!-- <meta-data
-                  android:name="android.app.lib_name"
-                  android:value="" >
 
-             </meta-data>-->
         </activity>
         <activity
             android:name=".ui.SingleCategoryActivity"
             android:exported="false"
             android:theme="@style/CategoryNoActionBar">
 
-            <!--
-                <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-            -->
+        </activity>
+
+        <activity
+            android:name=".ui.CreatePostActivity"
+            android:exported="false">
+
         </activity>
         <activity
             android:name=".ui.MainActivity"
@@ -56,6 +56,11 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
     </application>
 
 </manifest>

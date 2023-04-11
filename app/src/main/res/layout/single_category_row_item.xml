@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="50dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/singleImageProfile"
@@ -79,7 +80,7 @@
         android:layout_marginTop="16dp"
         android:foreground="?attr/selectableItemBackground"
         app:layout_constraintTop_toBottomOf="@+id/cateTitle"
-        app:readMoreColor="@color/purple_200"
+        app:readMoreColor="@color/teal_700"
         app:readMoreMaxLine="4"
         app:readMoreText="...ReadMore"
         tools:layout_editor_absoluteX="0dp"
@@ -91,37 +92,15 @@
         android:id="@+id/relativeLayout"
         app:layout_constraintTop_toBottomOf="@+id/cate_description"
         android:layout_width="match_parent"
-        app:layout_constraintBottom_toBottomOf="@+id/linOne"
         android:layout_height="wrap_content">
-
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
             android:id="@+id/slider"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="112dp">
 
         </androidx.recyclerview.widget.RecyclerView>
-
-
-
-        <!-- <com.smarteist.autoimageslider.SliderView
-             android:id="@+id/slider"
-             android:layout_width="wrap_content"
-             android:layout_height="150dp"
-             app:sliderAnimationDuration="600"
-             app:sliderAutoCycleDirection="back_and_forth"
-             app:sliderIndicatorAnimationDuration="600"
-             app:sliderIndicatorEnabled="true"
-             app:sliderIndicatorGravity="center_horizontal|bottom"
-             app:sliderIndicatorMargin="15dp"
-             app:sliderIndicatorOrientation="horizontal"
-             app:sliderIndicatorPadding="3dp"
-             app:sliderIndicatorRadius="2dp"
-             app:sliderIndicatorSelectedColor="#5A5A5A"
-
-             app:sliderIndicatorUnselectedColor="#FFF"
-             app:sliderScrollTimeInSec="1"
-             tools:ignore="MissingClass,MissingConstraints" />
-     -->
     </RelativeLayout>
 
 
@@ -130,85 +109,111 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="2"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
-        tools:layout_editor_absoluteX="0dp">
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="-9dp">
 
-        <ImageView
-            android:id="@+id/favorite"
-            android:layout_width="0dp"
+        <RelativeLayout
 
-            android:layout_height="wrap_content"
-            android:layout_weight="0.3"
-            android:src="@drawable/ic_favorite">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        </ImageView>
+            <ImageView
+                android:layout_marginStart="15dp"
+                android:id="@+id/favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_favorite"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.157"
+                tools:layout_editor_absoluteY="16dp">
 
-        <TextView
-            android:id="@+id/favoriteText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="0">
+            </ImageView>
 
-        </TextView>
+            <TextView
+                android:id="@+id/favoriteText"
+                android:layout_width="12dp"
+                android:layout_height="18dp"
+                android:hint="@string/_0"
+                android:layout_toRightOf="@+id/favorite"
+                app:layout_constraintStart_toEndOf="@+id/favorite"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteY="16dp">
 
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.3"
-            android:src="@drawable/ic_viewer">
+            </TextView>
 
-        </ImageView>
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_toLeftOf="@+id/vCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_viewer"
+                tools:layout_editor_absoluteX="324dp">
 
-        <TextView
-            android:id="@+id/vCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/view_count">
+            </ImageView>
 
-        </TextView>
+            <TextView
+                android:id="@+id/vCount"
+                android:layout_marginEnd="15dp"
+                android:layout_alignParentEnd="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintVertical_bias="0.523">
+            </TextView>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/view">
+        </RelativeLayout>
 
-        </TextView>
+
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="2"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="match_parent"
         app:layout_constraintTop_toBottomOf="@+id/linOne">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnFavorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:drawableStart="@drawable/ic_favorite"
-            android:padding="5dp"
-            android:text="Favorite">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        </com.google.android.material.button.MaterialButton>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFavorite"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:text="@string/like"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_favorite"
+                app:iconGravity="textStart"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="44dp"
+                tools:layout_editor_absoluteY="0dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:drawableStart="@drawable/ic_share"
-            android:padding="5dp"
-            android:text="@string/share">
+            </com.google.android.material.button.MaterialButton>
 
-        </com.google.android.material.button.MaterialButton>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/materialButton"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:text="@string/share"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_share"
+                app:iconGravity="textStart"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btnFavorite"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteY="0dp">
+
+            </com.google.android.material.button.MaterialButton>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

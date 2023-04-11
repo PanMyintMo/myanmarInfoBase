@@ -14,8 +14,10 @@ import com.pan.mvvm.adapter.LatestPostAdapter
 import com.pan.mvvm.adapter.PopularPostAdapter
 import com.pan.mvvm.databinding.FragmentMainBinding
 import com.pan.mvvm.utils.NetworkResult
+import com.pan.mvvm.utils.TokenManager
 import com.pan.mvvm.viewModel.MyanfobaseViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -27,6 +29,10 @@ class MainFragment : Fragment() {
     private lateinit var popularPostAdapter: PopularPostAdapter
     private lateinit var latestPostAdapter: LatestPostAdapter
 
+
+    @Inject
+    lateinit var tokenManager: TokenManager
+
     private val myanfobaseViewModel by viewModels<MyanfobaseViewModel>()
 
     override fun onCreateView(
@@ -34,7 +40,6 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainBinding.inflate(layoutInflater, container, false)
-
         //adapter
         adapter = CategoryRowAdapter()
         popularPostAdapter = PopularPostAdapter()
@@ -113,7 +118,6 @@ class MainFragment : Fragment() {
                     binding.progressBar.isVisible = true
                 }
             }
-
         }
     }
 
@@ -148,7 +152,6 @@ class MainFragment : Fragment() {
             }
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.pan.mvvm.R
 import com.pan.mvvm.databinding.SingleCateImageRowBinding
-import com.pan.mvvm.models.SingleCateItems
+import com.pan.mvvm.models.ProfilePicture
 
-class SingleCategoryImageAdapter (private val images: List<SingleCateItems>): RecyclerView.Adapter<SingleCategoryImageAdapter.MyImagesHolder>(){
+class SingleCategoryImageAdapter (private val images: List<ProfilePicture>): RecyclerView.Adapter<SingleCategoryImageAdapter.MyImagesHolder>(){
 
 
     class MyImagesHolder(imageView: View): RecyclerView.ViewHolder(imageView) {

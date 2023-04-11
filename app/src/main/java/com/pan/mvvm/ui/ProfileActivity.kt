@@ -7,12 +7,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.pan.mvvm.R
 import com.pan.mvvm.databinding.ActivityProfileBinding
 import com.pan.mvvm.models.ProfileResponse
@@ -43,15 +48,13 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        //setup custom tool bar
+        setSupportActionBar(binding.toolbar)
 
+        val actionBar = supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(true)
 
-        binding.editProfile.setOnClickListener {
-            binding.editProfileScrollView.isVisible = true
-            binding.profileScrollView.isVisible = false
-
-
-        }
-
+        binding.progressBar.visibility=View.GONE
         initDataPicker()
         // Check which radio button is selected
 
@@ -66,9 +69,28 @@ class ProfileActivity : AppCompatActivity() {
             pickUpImage()
         }
 
-        binding.submit.setOnClickListener {
+
+        binding.backButton.setOnClickListener {
+            MaterialAlertDialogBuilder(this@ProfileActivity)
+                .setTitle("Discard?")
+                .setMessage("Do you want to discard?")
+                .setPositiveButton("Ok") { _, _ ->
+                    finish()
+
+                }
+                .setNegativeButton("No") { _, _ ->
+                    Snackbar.make(binding.root, "Declined", Snackbar.LENGTH_SHORT).show()
+
+
+                }
+                .show()
+        }
+
+        binding.editProfile.setOnClickListener {
             checkProfileDetail()
         }
+
+
 
         observeUserProfileDetail()
 
@@ -97,6 +119,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun populateUserDetails(profileResponse: ProfileResponse) {
+
         val profileUrl = profileResponse.profilePicture[0].filePath
         Glide.with(this).load(profileUrl).into(binding.postImageProfile)
 
@@ -105,7 +128,14 @@ class ProfileActivity : AppCompatActivity() {
         binding.textAddress.text = profileResponse.address
         binding.textBio.text = profileResponse.bio
         binding.textGender.text = profileResponse.gender
+        //For Edit Profile
+        binding.editName.append(profileResponse.username)
+        binding.editEmail.append(profileResponse.email)
+        binding.editAddress.append(profileResponse.address)
+        binding.editBio.append(profileResponse.bio)
 
+        val editProfileUrl = profileResponse.profilePicture[0].filePath
+        Glide.with(this).load(editProfileUrl).into(binding.postImage)
     }
 
     private fun checkProfileDetail() {
@@ -117,8 +147,6 @@ class ProfileActivity : AppCompatActivity() {
         val profileImage = binding.postImage.drawable != null
 
         var errorMsg: String? = null
-
-
         //for navHeader
         id = tokenManager.getId()
 
@@ -149,7 +177,7 @@ class ProfileActivity : AppCompatActivity() {
         } else {
 
             updateProfile()
-            binding.editProfileScrollView.isVisible = false
+            binding.editProfileView.isVisible = false
             binding.profileScrollView.isVisible = true
         }
 
@@ -160,11 +188,11 @@ class ProfileActivity : AppCompatActivity() {
         myanfobaseViewModel.updateUserProfileDetail.observe(this) { response ->
             when (response) {
                 is NetworkResult.Success -> {
-
                     response.data?.let { populateUserDetails(it) }
-
-                    Toast.makeText(this, "Profile Detail is Successful!1", Toast.LENGTH_SHORT)
+                    Toast.makeText(this, "Profile Detail is Successful!", Toast.LENGTH_SHORT)
                         .show()
+                    binding.progressBar.visibility= View.GONE
+
                 }
 
                 is NetworkResult.Error -> {
@@ -173,9 +201,11 @@ class ProfileActivity : AppCompatActivity() {
                         .setMessage(response.message)
                         .setPositiveButton(android.R.string.ok, null)
                         .show()
+                    binding.progressBar.visibility=View.GONE
+
                 }
                 is NetworkResult.Loading -> {
-
+                    binding.progressBar.visibility=View.VISIBLE
                 }
                 else -> {
 
@@ -265,5 +295,26 @@ class ProfileActivity : AppCompatActivity() {
             // Show DatePickerDialog
             datePickerDialog.show()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.profile_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+
+            R.id.editProfile -> {
+                binding.editProfileView.isVisible = true
+                binding.profileScrollView.isVisible = false
+
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

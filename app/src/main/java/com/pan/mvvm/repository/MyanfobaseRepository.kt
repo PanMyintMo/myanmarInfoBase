@@ -1,6 +1,7 @@
 package com.pan.mvvm.repository
 
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pan.mvvm.api.MyanFoBaseApi
@@ -13,6 +14,7 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.File
+import java.util.*
 import javax.inject.Inject
 
 
@@ -40,7 +42,7 @@ class MyanfobaseRepository @Inject constructor(
     val favoriteCheckResponse: LiveData<NetworkResult<FavoriteCheckResponse>>
         get() = _checkFavoriteLiveData
 
-    suspend fun checkFavoritePost(favoriteCheck: FavoriteCheck) {
+    suspend fun checkUserFavoritePost(favoriteCheck: FavoriteCheck) {
         _checkFavoriteLiveData.postValue(NetworkResult.Loading())
         val response = myanFoBaseApi.checkFavoritePost(favoriteCheck)
 
@@ -88,6 +90,63 @@ class MyanfobaseRepository @Inject constructor(
 
     }
 
+    //create new post
+
+    private val _createNewPostResponseLiveData =
+        MutableLiveData<NetworkResult<NewPostResponse>>()
+    val newPostResponse: LiveData<NetworkResult<NewPostResponse>>
+        get() = _createNewPostResponseLiveData
+
+    suspend fun createNewPost(
+        cateId: RequestBody,
+        cateName: RequestBody,
+        title: RequestBody,
+        description: RequestBody,
+        files: List<File>
+    ) {
+        try {
+            _createNewPostResponseLiveData.postValue(NetworkResult.Loading())
+            val validImageExtensions = arrayOf("png", "jpeg", "jpg")
+            val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
+            
+
+            files.forEachIndexed { index, file ->
+                // Check if the file is a valid image file
+                if (validImageExtensions.contains(file.extension.lowercase(Locale.getDefault()))) {
+                    val mimeType = when (file.extension.lowercase(Locale.getDefault())) {
+                        "png" -> "image/png"
+                        "jpg", "jpeg" -> "image/jpeg"
+                        else -> throw IllegalArgumentException("Unsupported file type")
+                    }
+                    val requestBody = file.asRequestBody(mimeType.toMediaTypeOrNull())
+                    val fileName = "${System.currentTimeMillis()}_$index.${file.extension}"
+                    Log.d("FILE_EXTENSION", file.extension)
+                    builder.addFormDataPart("files", fileName, requestBody)
+                    
+                }
+            }
+
+            val requestBody = builder.build()
+            val response =
+                myanFoBaseApi.createNewPost(cateId, cateName, title, description, requestBody.parts)
+
+            if (response.isSuccessful && response.body() != null) {
+                _createNewPostResponseLiveData.postValue(NetworkResult.Success(response.body()!!))
+            } else if (response.errorBody() != null) {
+                val errorText = response.errorBody()!!.charStream().readText()
+                val errorMessage = try {
+                    JSONObject(errorText).getString("message")
+                } catch (e: JSONException) {
+                    errorText
+                }
+                _createNewPostResponseLiveData.postValue(NetworkResult.Error(errorMessage))
+            } else {
+                _createNewPostResponseLiveData.postValue(NetworkResult.Error("Something went wrong!"))
+            }
+        } catch (e: Exception) {
+            _createNewPostResponseLiveData.postValue(NetworkResult.Error(e.message))
+        }
+    }
 
     //put update user profile detail
     private val _updateProfileDetailResponseLiveData =
@@ -120,7 +179,7 @@ class MyanfobaseRepository @Inject constructor(
             id,
             profilePicturePart, username, email, dob, gender, address, bio
         )
-        val responseBody = response.body().toString()
+        //val responseBody = response.body().toString()
         // Log.d("API_RESPONSE", responseBody)
 
         if (response.isSuccessful && response.body() != null) {

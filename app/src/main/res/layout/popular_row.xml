@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/popular"
     android:layout_width="350dp"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     android:padding="15dp"
-    app:cardCornerRadius="25dp">
+    app:cardCornerRadius="25dp"
+    app:strokeColor="@color/black"
+    app:strokeWidth="1dp">
 
     <RelativeLayout
-        android:padding="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/custom_shape">
+        android:padding="5dp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/postImage"
@@ -41,8 +42,8 @@
             android:maxLines="3"
             android:padding="5dp"
             android:text="@string/popular_title"
-            android:textColor="@color/white">
+            android:textColor="@color/black">
 
         </TextView>
     </RelativeLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

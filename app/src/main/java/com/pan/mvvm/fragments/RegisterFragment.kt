@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.pan.mvvm.R
 import com.pan.mvvm.databinding.FragmentRegisterBinding
@@ -42,7 +41,7 @@ class RegisterFragment : Fragment() {
 
         if (tokenManager.getToken() != null){
 
-            Log.d("TOKEN", tokenManager.getToken()!!)
+           // Log.d("TOKEN", tokenManager.getToken()!!)
             findNavController().navigate(R.id.action_registerFragment_to_mainFragment)
         }
         binding.btnSignUp.setOnClickListener {
@@ -90,7 +89,7 @@ class RegisterFragment : Fragment() {
     }
 
     private fun bindObservers() {
-        authViewModel.registerResponseLiveData.observe(viewLifecycleOwner, Observer {
+        authViewModel.registerResponseLiveData.observe(viewLifecycleOwner){
             binding.progressBar.isVisible = false
 
             when (it) {
@@ -111,7 +110,7 @@ class RegisterFragment : Fragment() {
                 }
 
             }
-        })
+        }
     }
 
 

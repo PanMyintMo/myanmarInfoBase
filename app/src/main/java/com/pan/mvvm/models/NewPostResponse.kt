@@ -1,13 +1,14 @@
 package com.pan.mvvm.models
 
-import android.os.Parcelable
-import androidx.annotation.Keep
+
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
+import android.os.Parcelable
+import androidx.annotation.Keep
 
 @Keep
 @Parcelize
-data class SingleCateItem(
+data class NewPostResponse(
     @SerializedName("cateId")
     val cateId: String,
     @SerializedName("cateName")
@@ -37,5 +38,5 @@ data class SingleCateItem(
     @SerializedName("__v")
     val v: Int,
     @SerializedName("viewcount")
-    var viewcount: Double
+    val viewcount: Int
 ) : Parcelable
