@@ -12,11 +12,25 @@ import com.pan.mvvm.models.LatestPostItem
 class LatestPostAdapter : RecyclerView.Adapter<LatestPostAdapter.MyViewHolder>() {
 
     private var latestPostList = emptyList<LatestPostItem>()
+    private var filterLatestPostList = emptyList<LatestPostItem>()
 
-    fun setLatestPostItem(latestPostItem:List<LatestPostItem>){
-        this.latestPostList=latestPostItem
+    fun setLatestPostItem(latestPostItem: List<LatestPostItem>) {
+        this.latestPostList = latestPostItem
+        this.filterLatestPostList = latestPostItem
     }
 
+
+    fun filter(query: String?) {
+        query?.let {
+            filterLatestPostList = latestPostList.filter { latestPostItem ->
+                latestPostItem.title.contains(query, ignoreCase = true)
+            }
+        }
+            ?: run {
+                filterLatestPostList = latestPostList
+            }
+        notifyDataSetChanged()
+    }
 
     class MyViewHolder(val binding: LatestpostRowBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -27,7 +41,8 @@ class LatestPostAdapter : RecyclerView.Adapter<LatestPostAdapter.MyViewHolder>()
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val latestPostList = latestPostList[position]
+        val latestPostList = filterLatestPostList[position]
+        holder.binding.cateTitle.text= latestPostList.cateName
         holder.binding.latestUserName.text = latestPostList.username
         holder.binding.latestDescription.text = latestPostList.description
         holder.binding.timeCreate.text = latestPostList.createdAt.substring(0, 10)
@@ -39,11 +54,12 @@ class LatestPostAdapter : RecyclerView.Adapter<LatestPostAdapter.MyViewHolder>()
 
 
         holder.binding.root.setOnClickListener {
-            val action=MainFragmentDirections.actionMainFragmentToLatestPostDetailFragment(latestPostList)
+            val action =
+                MainFragmentDirections.actionMainFragmentToLatestPostDetailFragment(latestPostList)
             holder.itemView.findNavController().navigate(action)
         }
 
     }
 
-    override fun getItemCount(): Int = latestPostList.size
+    override fun getItemCount(): Int = filterLatestPostList.size
 }

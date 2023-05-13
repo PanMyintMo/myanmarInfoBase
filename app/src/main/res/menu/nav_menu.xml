@@ -13,14 +13,21 @@
     <item
         android:id="@+id/save"
         android:icon="@drawable/ic_save"
-        android:title="@string/save"
+        android:title="Favorite"
         tools:targetApi="o">
 
     </item>
 
 
-    <item android:title="@string/setting">
+    <item android:title="@string/categories">
         <menu>
+           <!-- <item
+                android:id="@+id/changePassword"
+                android:icon="@drawable/ic_change_password"
+                android:title="@string/change_password"
+                tools:targetApi="o">
+
+            </item>-->
             <item
                 android:id="@+id/theme"
                 android:icon="@drawable/ic_theme"
@@ -30,13 +37,18 @@
             </item>
         </menu>
     </item>
-    <item android:title="@string/categories">
+
+    <item android:title="@string/setting">
         <menu>
+
             <item
-                android:id="@+id/changePassword"
-                android:icon="@drawable/ic_change_password"
-                android:title="@string/change_password"
-                tools:targetApi="o">
+                android:id="@+id/contactUs"
+                android:title="Contact Us">
+
+            </item>
+            <item
+                android:id="@+id/about"
+                android:title="About Us">
 
             </item>
             <item

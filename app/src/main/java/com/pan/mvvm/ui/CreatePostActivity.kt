@@ -2,20 +2,17 @@ package com.pan.mvvm.ui
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.pan.mvvm.R
 import com.pan.mvvm.adapter.PickUpImageAdapter
 import com.pan.mvvm.databinding.ActivityCreatePostBinding
 import com.pan.mvvm.utils.NetworkResult
@@ -23,14 +20,16 @@ import com.pan.mvvm.viewModel.MyanfobaseViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.io.FileOutputStream
+
 
 @AndroidEntryPoint
 class CreatePostActivity : AppCompatActivity() {
     private val myanfobaseViewModel by viewModels<MyanfobaseViewModel>()
     private lateinit var binding: ActivityCreatePostBinding
-    private var spinner: Spinner? = null
+    private var autoCompleteTextView: AutoCompleteTextView? = null
     private val categoryNames = mutableListOf<String>()
     private var cateId: String? = null
     private var cateName: String? = null
@@ -40,34 +39,12 @@ class CreatePostActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCreatePostBinding.inflate(layoutInflater)
-        spinner = binding.spinner
+        autoCompleteTextView = binding.spinner
 
 
-        val actionBar = supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
-        actionBar?.setDisplayShowHomeEnabled(true)
-
-        supportActionBar?.apply {
-            val customView = LayoutInflater.from(this@CreatePostActivity).inflate(R.layout.custom_actionbar_title, null)
-            val layoutParams = ActionBar.LayoutParams(
-                ActionBar.LayoutParams.MATCH_PARENT,
-                ActionBar.LayoutParams.MATCH_PARENT,
-                Gravity.CENTER
-            )
-
-            setCustomView(customView, layoutParams)
-            displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-            setDisplayShowTitleEnabled(false)
-
-            // Get a reference to the back button view in the custom view layout
-            val backButton = customView.findViewById<Button>(R.id.back_button)
-
-            // Set a click listener to the back button view
-            backButton.setOnClickListener {
-                // Handle back button click event
-                finish()
-            }
-        }
+        //setup custom tool bar
+        setSupportActionBar(binding.toolbarPost)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
 
         binding.btnCancel.setOnClickListener {
@@ -96,7 +73,9 @@ class CreatePostActivity : AppCompatActivity() {
 
         val intent = Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         intent.type = "image/*"
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        }
         resultLauncher.launch(Intent.createChooser(intent, "Choose an images"))
     }
 
@@ -127,19 +106,21 @@ class CreatePostActivity : AppCompatActivity() {
     private fun updatePickedImages() {
         val imageAdapter = PickUpImageAdapter(this, pickedImages)
         binding.postRecycler.adapter = imageAdapter
+        binding.postRecycler.layoutManager =
+            LinearLayoutManager(this@CreatePostActivity, LinearLayoutManager.VERTICAL, false)
     }
 
 
     private fun checkPostDetail() {
-        val cateName = binding.spinner.selectedItem.toString()
+        val cateName = binding.spinner.text.toString()
         val title = binding.editTitle.text.toString()
         val description = binding.editDesc.text.toString()
         val hasImage = (binding.postRecycler.adapter?.itemCount ?: 0) > 0
         var errorMsg: String? = null
 
         when {
-            TextUtils.isEmpty(cateName) -> {
-                errorMsg = "Choose One Category"
+            cateName == "Choose Category" -> {
+                errorMsg = "Please choose a category"
             }
             TextUtils.isEmpty(title) -> {
                 errorMsg = "Title Require"
@@ -159,69 +140,64 @@ class CreatePostActivity : AppCompatActivity() {
         }
     }
 
-
     private fun requestCreateNewPost() {
         myanfobaseViewModel.createNewPost(
-            cateId =createPathFromString(cateId.toString()),
+            cateId = createPathFromString(cateId.toString()),
             cateName = createPathFromString(cateName.toString()),
             title = createPathFromString(binding.editTitle.text.toString()),
             description = createPathFromString(binding.editDesc.text.toString()),
             files = getRealPathFromURI(pickedImages)
         )
-
     }
 
 
-    private fun createPathFromString(value: String): RequestBody{
-        return RequestBody.create("text/plain".toMediaTypeOrNull(), value)
+    private fun createPathFromString(value: String): RequestBody {
+        return value.toRequestBody("text/plain".toMediaTypeOrNull())
     }
-
-
-
 
     private fun getRealPathFromURI(uris: List<Uri?>): List<File> {
-         val realPath = mutableListOf<File>()
-         for (uri in uris) {
-             val contentResolver = applicationContext.contentResolver
-             val projection =
-                 arrayOf(MediaStore.MediaColumns.DISPLAY_NAME, MediaStore.MediaColumns.SIZE)
-             val cursor =
-                 uri?.let { contentResolver.query(it, projection, null, null, null) }
-             cursor?.let {
-                 if (it.moveToFirst()) {
-                     val fileNameIndex =
-                         it.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME)
-                     val fileSizeIndex = it.getColumnIndexOrThrow(MediaStore.MediaColumns.SIZE)
-                     val fileName = it.getString(fileNameIndex)
-                     val fileSize = it.getLong(fileSizeIndex)
+        val realPath = mutableListOf<File>()
+        for (uri in uris) {
+            val contentResolver = applicationContext.contentResolver
+            val projection =
+                arrayOf(MediaStore.MediaColumns.DISPLAY_NAME, MediaStore.MediaColumns.SIZE)
+            val cursor =
+                uri?.let { contentResolver.query(it, projection, null, null, null) }
+            cursor?.let {
+                if (it.moveToFirst()) {
+                    val fileNameIndex =
+                        it.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME)
+                    val fileSizeIndex = it.getColumnIndexOrThrow(MediaStore.MediaColumns.SIZE)
+                    val fileName = it.getString(fileNameIndex)
+                    val fileSize = it.getLong(fileSizeIndex)
 
 
-                     if (fileSize <= 5 * 1024 * 1024) { // 5MB in bytes
-                         val file = File(cacheDir, fileName)
-                         val inputStream = contentResolver.openInputStream(uri)
-                         val outputStream = FileOutputStream(file)
-                         inputStream?.use { input ->
-                             outputStream.use { output ->
-                                 input.copyTo(output)
-                             }
-                         }
-                         if (file.exists() && file.length() == fileSize) {
-                             realPath.add(file)
-                         }
-                     } else {
-                         // handle the case where the file size is greater than 5MB
-                         Toast.makeText(
-                             this@CreatePostActivity,
-                             "Fill size can not exceed 5 MB!",
-                             Toast.LENGTH_SHORT
-                         ).show()
-                     }
-                 }
-                 cursor.close()
-             }
-         }
-         return realPath
-     }
+                    if (fileSize <= 5 * 1024 * 1024) { // 5MB in bytes
+                        val file = File(cacheDir, fileName)
+                        val inputStream = contentResolver.openInputStream(uri)
+                        val outputStream = FileOutputStream(file)
+                        inputStream?.use { input ->
+                            outputStream.use { output ->
+                                input.copyTo(output)
+                            }
+                        }
+                        if (file.exists() && file.length() == fileSize) {
+                            realPath.add(file)
+                        }
+                    } else {
+                        // handle the case where the file size is greater than 5MB
+                        Toast.makeText(
+                            this@CreatePostActivity,
+                            "Fill size can not exceed 5 MB!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+                cursor.close()
+            }
+        }
+        return realPath
+    }
 
     private fun bindObserverCategoryName() {
         myanfobaseViewModel.getAllCategoryLiveData.observe(this) { response ->
@@ -238,39 +214,21 @@ class CreatePostActivity : AppCompatActivity() {
                         android.R.layout.simple_spinner_dropdown_item,
                         categoryNames
                     )
-                    spinner?.adapter = adapter
+                    autoCompleteTextView?.setAdapter(adapter)
 
 
-                    spinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                        override fun onItemSelected(
-                            parent: AdapterView<*>?,
-                            view: View?,
-                            position: Int,
-                            id: Long
-                        ) {
-                            // Do something when an item is selected
-
-                            val selectedItem = parent?.getItemAtPosition(position) as String
-
-                            for (element in cateList) {
-                                if (element.catename == selectedItem) {
-                                    cateId = element.id.toString()
-                                    cateName = element.catename
-                                    break
-                                }
+                    autoCompleteTextView?.setOnItemClickListener { parent, _, position, id ->
+                        val selectedItem = parent.getItemAtPosition(position) as String
+                        for (element in cateList) {
+                            if (element.catename == selectedItem) {
+                                cateId = element.id.toString()
+                                cateName = element.catename
+                                break
                             }
-
-                            Log.d("Spinner", "selected item id :$cateId")
-
                         }
-
-                        override fun onNothingSelected(p0: AdapterView<*>?) {
-
-                        }
-
+                        Log.d("AutoCompleteTextView", "selected item id :$cateId")
                     }
                 }
-
                 is NetworkResult.Error -> {}
                 is NetworkResult.Loading -> {}
 
@@ -306,13 +264,4 @@ class CreatePostActivity : AppCompatActivity() {
 
         }
     }
-
-   /* override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }*/
 }

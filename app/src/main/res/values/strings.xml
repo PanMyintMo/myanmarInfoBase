@@ -20,7 +20,6 @@
     <string name="don_t_have_an_account_register_now">Don\'t have an account? Register Now</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="trending_post">Trending Post</string>
-    <string name="latest_post">Latest Post</string>
     <string name="category_name">Category Name</string>
     <string name="popular_title">Popular Title</string>
     <string name="user_profile">User Profile</string>
@@ -32,7 +31,7 @@
 
     <style name="RoundedSquare">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">15%</item>
+        <item name="cornerSize">5%</item>
     </style>
 
 
@@ -43,7 +42,6 @@
     <string name="description">Description</string>
     <string name="favorite_text">Favorite Text</string>
     <string name="view_count">View Count</string>
-    <string name="view">View</string>
     <string name="favorite">Favorite</string>
     <string name="share">Share</string>
     <string name="email">Email</string>
@@ -74,4 +72,6 @@
     <string name="choose_category">Choose Category</string>
     <string name="title">Title:</string>
     <string name="type_title_here">Type title here...</string>
+    <string name="copy_right">Copyright %d by MyanmarDev</string>
+    <string name="latest_news">Latest News</string>
 </resources>

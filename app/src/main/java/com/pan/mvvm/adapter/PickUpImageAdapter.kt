@@ -14,13 +14,8 @@ class PickUpImageAdapter(
     private val context: Context,
     private val imageList: ArrayList<Uri>
 ) : RecyclerView.Adapter<PickUpImageAdapter.MyViewHolder>() {
-
-
-
-   inner class MyViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
-
-      val binding=PickupimagesBinding.bind(itemView)
-
+    inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val binding = PickupimagesBinding.bind(itemView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -31,15 +26,12 @@ class PickUpImageAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        if (imageList != null) {
-            Glide.with(context)
-                .load(imageList[position])
-                .into(holder.binding.ivImage)
-        }
+        Glide.with(context)
+            .load(imageList[position])
+            .into(holder.binding.ivImage)
 
     }
 
-    override fun getItemCount(): Int = imageList?.size!!
-
+    override fun getItemCount(): Int = imageList.size
 
 }

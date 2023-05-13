@@ -36,6 +36,56 @@ class MyanfobaseRepository @Inject constructor(
         }
     }*/
 
+
+    //get gold and fuel rate
+    private val _getGoldAndFuelLiveData =
+        MutableLiveData<NetworkResult<List<GoldAndFuelResponseItem>>>()
+    val getGoldAndFuelResponseItem: MutableLiveData<NetworkResult<List<GoldAndFuelResponseItem>>> get() = _getGoldAndFuelLiveData
+
+    suspend fun getGoldAndFuel() {
+        _getGoldAndFuelLiveData.postValue(NetworkResult.Loading())
+        val response = myanFoBaseApi.getGoldAndFuel()
+
+        if (response.isSuccessful && response.body() != null) {
+            _getGoldAndFuelLiveData.postValue(NetworkResult.Success(response.body()!!))
+        } else if (response.errorBody() != null) {
+            val errorText = response.errorBody()!!.charStream().readText()
+            val errorMessage = try {
+                JSONObject(errorText).getString("message")
+            } catch (e: JSONException) {
+                errorText
+            }
+            _getGoldAndFuelLiveData.postValue(NetworkResult.Error(errorMessage))
+        } else {
+            _getGoldAndFuelLiveData.postValue(NetworkResult.Error("Something wrong"))
+        }
+    }
+
+    //get All currency rate
+    private val _getCurrencyRateLiveData =
+        MutableLiveData<NetworkResult<List<CurrencyResponseItem>>>()
+    val getCurrencyResponse: MutableLiveData<NetworkResult<List<CurrencyResponseItem>>> get() = _getCurrencyRateLiveData
+
+    suspend fun getAllCurrencyRate() {
+        _getCurrencyRateLiveData.postValue(NetworkResult.Loading())
+        val response = myanFoBaseApi.getCurrency()
+
+        if (response.isSuccessful && response.body() != null) {
+            _getCurrencyRateLiveData.postValue(NetworkResult.Success(response.body()!!))
+        } else if (response.errorBody() != null) {
+            val errorText = response.errorBody()!!.charStream().readText()
+            val errorMessage = try {
+                JSONObject(errorText).getString("message")
+            } catch (e: JSONException) {
+                errorText
+            }
+            _getCurrencyRateLiveData.postValue(NetworkResult.Error(errorMessage))
+        } else {
+            _getCurrencyRateLiveData.postValue(NetworkResult.Error("Something went wrong"))
+
+        }
+    }
+
     //favorite check is already true or not
 
     private val _checkFavoriteLiveData = MutableLiveData<NetworkResult<FavoriteCheckResponse>>()
@@ -62,6 +112,30 @@ class MyanfobaseRepository @Inject constructor(
 
     }
 
+    //get all favorite post
+    private val _getAllFavPostLiveData =
+        MutableLiveData<NetworkResult<AllFavoritedItemResponseClass>>()
+    val getAllFavPostLiveData: LiveData<NetworkResult<AllFavoritedItemResponseClass>> get() = _getAllFavPostLiveData
+
+    suspend fun getAllFavPost(user: String) {
+        _getAllFavPostLiveData.postValue(NetworkResult.Loading())
+        val response = myanFoBaseApi.getAllFavPosts(user)
+        if (response.isSuccessful && response.body() !=null){
+            _getAllFavPostLiveData.postValue(NetworkResult.Success(response.body()!!))
+        }
+        else if (response.errorBody()!=null){
+            val errorText = response.errorBody()!!.charStream().readText()
+            val errorMessage = try {
+                JSONObject(errorText).getString("message")
+            } catch (e: JSONException) {
+                errorText
+            }
+            _getAllFavPostLiveData.postValue(NetworkResult.Error(errorMessage))
+        }
+        else    {
+            _getAllFavPostLiveData.postValue(NetworkResult.Error("Something wrong"))
+        }
+    }
 
     //for favorite
     private val _favoriteLiveData = MutableLiveData<NetworkResult<FavoriteResponse>>()
@@ -90,6 +164,27 @@ class MyanfobaseRepository @Inject constructor(
 
     }
 
+    //remove favorite
+    private val _removeFavoriteLiveData = MutableLiveData<NetworkResult<RemoveFavResponse>>()
+    val removeFavResponse: LiveData<NetworkResult<RemoveFavResponse>> get() = _removeFavoriteLiveData
+
+    suspend fun removeFromFavorite(favoriteCheck: FavoriteCheck) {
+        _removeFavoriteLiveData.postValue(NetworkResult.Loading())
+        val response = myanFoBaseApi.removeFromFavoritePost(favoriteCheck)
+        if (response.isSuccessful && response.body() != null) {
+            _removeFavoriteLiveData.postValue(NetworkResult.Success(response.body()!!))
+        } else if (response.errorBody() != null) {
+            val errorText = response.errorBody()!!.charStream().readText()
+            val errorMessage = try {
+                JSONObject(errorText).getString("message")
+            } catch (e: JSONException) {
+                errorText
+            }
+            _removeFavoriteLiveData.postValue(NetworkResult.Error(errorMessage))
+        } else {
+            _removeFavoriteLiveData.postValue(NetworkResult.Error("Something went wrong"))
+        }
+    }
     //create new post
 
     private val _createNewPostResponseLiveData =
@@ -108,7 +203,7 @@ class MyanfobaseRepository @Inject constructor(
             _createNewPostResponseLiveData.postValue(NetworkResult.Loading())
             val validImageExtensions = arrayOf("png", "jpeg", "jpg")
             val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
-            
+
 
             files.forEachIndexed { index, file ->
                 // Check if the file is a valid image file
@@ -122,7 +217,7 @@ class MyanfobaseRepository @Inject constructor(
                     val fileName = "${System.currentTimeMillis()}_$index.${file.extension}"
                     Log.d("FILE_EXTENSION", file.extension)
                     builder.addFormDataPart("files", fileName, requestBody)
-                    
+
                 }
             }
 
@@ -229,6 +324,23 @@ class MyanfobaseRepository @Inject constructor(
         }
     }
 
+    //get category detail post
+    private val _getDetailPostCategoryLiveData =
+        MutableLiveData<NetworkResult<CategoryDetailPostResponse>>()
+    val getCategoryDetailPostData: LiveData<NetworkResult<CategoryDetailPostResponse>> get() = _getDetailPostCategoryLiveData
+
+    suspend fun getCategoryDetailPost(id: String) {
+        _getDetailPostCategoryLiveData.postValue(NetworkResult.Loading())
+        val response = myanFoBaseApi.getDetailPostCategory(id)
+        if (response.isSuccessful && response.body() != null) {
+            _getDetailPostCategoryLiveData.postValue(NetworkResult.Success(response.body()!!))
+        } else if (response.errorBody() != null) {
+            val errorObj = JSONObject(response.errorBody()!!.charStream().readText())
+            _getDetailPostCategoryLiveData.postValue(NetworkResult.Error(errorObj.getString("message")))
+        } else {
+            _getDetailPostCategoryLiveData.postValue(NetworkResult.Error("Something wrong"))
+        }
+    }
 
     //get Single Category Items
 

@@ -1,6 +1,7 @@
 package com.pan.mvvm.ui
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -9,8 +10,6 @@ import android.provider.MediaStore
 import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -21,12 +20,14 @@ import com.google.android.material.snackbar.Snackbar
 import com.pan.mvvm.R
 import com.pan.mvvm.databinding.ActivityProfileBinding
 import com.pan.mvvm.models.ProfileResponse
+import com.pan.mvvm.utils.Constants.PROFILE_IMAGE_URI_KEY
 import com.pan.mvvm.utils.NetworkResult
 import com.pan.mvvm.utils.TokenManager
 import com.pan.mvvm.viewModel.MyanfobaseViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -39,6 +40,7 @@ class ProfileActivity : AppCompatActivity() {
     private var gender: String? = null
     private var id: String? = null
     private var uri: Uri? = null
+
 
     // TOKEN MANAGER MUST BE INITIALIZED BEFORE ON_CREATE
     @Inject
@@ -54,21 +56,12 @@ class ProfileActivity : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
-        binding.progressBar.visibility=View.GONE
         initDataPicker()
         // Check which radio button is selected
-
-        gender = when (binding.genderGroup.checkedRadioButtonId) {
-            R.id.maleButton -> "Male"
-            R.id.femaleButton -> "Female"
-            else -> ""
-        }
-        binding.genderText.text = "Selected gender: $gender"
 
         binding.floatingAction.setOnClickListener {
             pickUpImage()
         }
-
 
         binding.backButton.setOnClickListener {
             MaterialAlertDialogBuilder(this@ProfileActivity)
@@ -80,8 +73,6 @@ class ProfileActivity : AppCompatActivity() {
                 }
                 .setNegativeButton("No") { _, _ ->
                     Snackbar.make(binding.root, "Declined", Snackbar.LENGTH_SHORT).show()
-
-
                 }
                 .show()
         }
@@ -89,8 +80,6 @@ class ProfileActivity : AppCompatActivity() {
         binding.editProfile.setOnClickListener {
             checkProfileDetail()
         }
-
-
 
         observeUserProfileDetail()
 
@@ -118,33 +107,22 @@ class ProfileActivity : AppCompatActivity() {
 
     }
 
-    private fun populateUserDetails(profileResponse: ProfileResponse) {
-
-        val profileUrl = profileResponse.profilePicture[0].filePath
-        Glide.with(this).load(profileUrl).into(binding.postImageProfile)
-
-        binding.textUserName.text = profileResponse.username
-        binding.textEmail.text = profileResponse.email
-        binding.textAddress.text = profileResponse.address
-        binding.textBio.text = profileResponse.bio
-        binding.textGender.text = profileResponse.gender
-        //For Edit Profile
-        binding.editName.append(profileResponse.username)
-        binding.editEmail.append(profileResponse.email)
-        binding.editAddress.append(profileResponse.address)
-        binding.editBio.append(profileResponse.bio)
-
-        val editProfileUrl = profileResponse.profilePicture[0].filePath
-        Glide.with(this).load(editProfileUrl).into(binding.postImage)
-    }
 
     private fun checkProfileDetail() {
         val username = binding.editName.text.toString()
         val email = binding.editEmail.text.toString()
         val address = binding.editAddress.text.toString()
-        val dob = binding.dob.text.toString()
+        val dob = binding.textdob.text.toString()
         val bio = binding.editBio.text.toString()
         val profileImage = binding.postImage.drawable != null
+
+        gender = when (binding.genderGroup.checkedRadioButtonId) {
+            R.id.maleButton -> "Male"
+            R.id.femaleButton -> "Female"
+            else -> ""
+        }
+        binding.genderText.text = "Selected gender: $gender"
+
 
         var errorMsg: String? = null
         //for navHeader
@@ -166,6 +144,11 @@ class ProfileActivity : AppCompatActivity() {
             TextUtils.isEmpty(dob) -> {
                 errorMsg = "Choose date of birth"
             }
+
+            TextUtils.isEmpty(gender) -> {
+                errorMsg = "Choose gender"
+            }
+
             !profileImage -> {
                 errorMsg = "Profile image is required"
             }
@@ -177,42 +160,12 @@ class ProfileActivity : AppCompatActivity() {
         } else {
 
             updateProfile()
-            binding.editProfileView.isVisible = false
+            binding.editProfileScrollView.isVisible = false
             binding.profileScrollView.isVisible = true
         }
 
     }
 
-    private fun observeUserProfileDetail() {
-
-        myanfobaseViewModel.updateUserProfileDetail.observe(this) { response ->
-            when (response) {
-                is NetworkResult.Success -> {
-                    response.data?.let { populateUserDetails(it) }
-                    Toast.makeText(this, "Profile Detail is Successful!", Toast.LENGTH_SHORT)
-                        .show()
-                    binding.progressBar.visibility= View.GONE
-
-                }
-
-                is NetworkResult.Error -> {
-                    // Toast.makeText(this, response.message, Toast.LENGTH_SHORT).show()
-                    MaterialAlertDialogBuilder(this@ProfileActivity)
-                        .setMessage(response.message)
-                        .setPositiveButton(android.R.string.ok, null)
-                        .show()
-                    binding.progressBar.visibility=View.GONE
-
-                }
-                is NetworkResult.Loading -> {
-                    binding.progressBar.visibility=View.VISIBLE
-                }
-                else -> {
-
-                }
-            }
-        }
-    }
 
     private fun pickUpImage() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -228,35 +181,44 @@ class ProfileActivity : AppCompatActivity() {
         }
 
     private fun getPickedImages(data: Intent) {
-
         uri = data.data
         if (uri != null) {
-            val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
-            binding.postImage.setImageBitmap(bitmap)
+            val imagePath = getRealPathFromURI(uri)
+            File(imagePath)
+            binding.postImage.setImageURI(uri)
+            // Save the image file path in SharedPreferences
+            val sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+            sharedPreferences.edit().putString(PROFILE_IMAGE_URI_KEY, imagePath).apply()
             true
         } else {
             false
         }
-
     }
 
     private fun updateProfile() {
-        myanfobaseViewModel.updateUserProfileDetail(
-            id.toString(),
-            profilePicture = File(getRealPathFromURI(uri)),
-            username = createPartFromString(binding.editName.text.toString()),
-            email = createPartFromString(binding.editEmail.text.toString()),
-            address = createPartFromString(binding.editAddress.text.toString()),
-            dob = createPartFromString(binding.dob.text.toString()),
-            gender = createPartFromString(gender.toString()),
-            bio = createPartFromString(binding.editBio.text.toString())
-        )
+        val sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+        val savedImagePath = sharedPreferences.getString(PROFILE_IMAGE_URI_KEY, null)
+        val imageFile =
+            savedImagePath?.let { File(it) } ?: uri?.let { File(getRealPathFromURI(uri)) }
+
+
+        imageFile?.let {
+            myanfobaseViewModel.updateUserProfileDetail(
+                id.toString(),
+                profilePicture = it,
+                username = createPartFromString(binding.editName.text.toString()),
+                email = createPartFromString(binding.editEmail.text.toString()),
+                address = createPartFromString(binding.editAddress.text.toString()),
+                dob = createPartFromString(binding.dob.text.toString()),
+                gender = createPartFromString(gender.toString()),
+                bio = createPartFromString(binding.editBio.text.toString())
+            )
+        }
     }
 
     private fun createPartFromString(value: String): RequestBody {
-        return RequestBody.create("text/plain".toMediaTypeOrNull(), value)
+        return value.toRequestBody("text/plain".toMediaTypeOrNull())
     }
-
 
     private fun getRealPathFromURI(uri: Uri?): String {
         var realPath = ""
@@ -284,10 +246,10 @@ class ProfileActivity : AppCompatActivity() {
             val day = currentDate.get(Calendar.DAY_OF_MONTH)
             //Initialize DatePickerDialog
 
-            val datePickerDialog = DatePickerDialog(this, { _, year, month, dayOfMonth ->
+            val datePickerDialog = DatePickerDialog(this, { _, years, month, dayOfMonth ->
                 // Do something with the selected date
                 val selectedDate = Calendar.getInstance()
-                selectedDate.set(year, month, dayOfMonth)
+                selectedDate.set(years, month, dayOfMonth)
                 val formattedDate = SimpleDateFormat("MMM dd yyyy").format(selectedDate.time)
                 binding.dob.text = formattedDate
             }, year, month, day)
@@ -295,6 +257,71 @@ class ProfileActivity : AppCompatActivity() {
             // Show DatePickerDialog
             datePickerDialog.show()
         }
+    }
+
+    private fun observeUserProfileDetail() {
+
+        myanfobaseViewModel.updateUserProfileDetail.observe(this) { response ->
+            when (response) {
+                is NetworkResult.Success -> {
+                    response.data?.let { populateUserDetails(it) }
+                    Toast.makeText(this, "Profile Detail is Successful!", Toast.LENGTH_SHORT)
+                        .show()
+
+                }
+
+                is NetworkResult.Error -> {
+                    // Toast.makeText(this, response.message, Toast.LENGTH_SHORT).show()
+                    MaterialAlertDialogBuilder(this@ProfileActivity)
+                        .setMessage(response.message)
+                        .setPositiveButton(android.R.string.ok, null)
+                        .show()
+
+                }
+                is NetworkResult.Loading -> {
+                }
+                else -> {
+
+                }
+            }
+        }
+    }
+
+    private fun populateUserDetails(profileResponse: ProfileResponse) {
+
+        val profileUrl = profileResponse.profilePicture[0].filePath
+        Glide.with(this).load(profileUrl).into(binding.postImageProfile)
+
+        binding.textUserName.text = profileResponse.username
+        binding.textEmail.text = profileResponse.email
+        binding.textAddress.text = profileResponse.address
+        binding.textBio.text = profileResponse.bio
+        binding.textGender.text = profileResponse.gender
+        binding.textdob.text = profileResponse.dob
+
+        //For Edit Profile
+        binding.editName.text?.clear()
+        binding.editName.append(profileResponse.username)
+        binding.editEmail.text?.clear()
+        binding.editEmail.append(profileResponse.email)
+        binding.editAddress.text?.clear()
+        binding.editAddress.append(profileResponse.address)
+        binding.editBio.text?.clear()
+        binding.editBio.append(profileResponse.bio)
+        binding.dob.text = ""
+        binding.dob.append(profileResponse.dob)
+
+        when (profileResponse.gender) {
+            "Male" -> binding.maleButton.isChecked = true
+            "Female" -> binding.femaleButton.isChecked = true
+            else -> {
+                binding.maleButton.isChecked = false
+                binding.femaleButton.isChecked = false
+            }
+        }
+
+        val editProfileUrl = profileResponse.profilePicture[0].filePath
+        Glide.with(this).load(editProfileUrl).into(binding.postImage)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -310,7 +337,7 @@ class ProfileActivity : AppCompatActivity() {
             }
 
             R.id.editProfile -> {
-                binding.editProfileView.isVisible = true
+                binding.editProfileScrollView.isVisible = true
                 binding.profileScrollView.isVisible = false
 
             }

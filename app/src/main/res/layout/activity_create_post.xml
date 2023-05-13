@@ -1,200 +1,265 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:fitsSystemWindows="true"
     tools:context=".ui.CreatePostActivity">
-
-    <LinearLayout
-        android:layout_marginTop="10dp"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_post"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <com.google.android.material.textview.MaterialTextView
+        android:background="#ffffff"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_post"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:fontFamily="@font/alex_brush"
-            android:padding="8dp"
-            android:text="@string/let_s_share_our_information_to_other_people"
-            android:textAlignment="center"
-            android:textSize="15sp"
-            android:textStyle="bold" />
+            android:layout_height="?attr/actionBarSize">
 
-        <com.google.android.material.textview.MaterialTextView
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Create Post"
+                android:textColor="@color/teal_700"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+
+        </com.google.android.material.appbar.MaterialToolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_post"
+        app:layout_constraintVertical_bias="0.0">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:fontFamily="@font/alex_brush"
-            android:padding="8dp"
-            android:text="@string/here_you_can_share_your_experience_information_life_tips_and_other_knowledge_by_posting"
-            android:textAlignment="center"
-            android:textSize="15sp"
-            android:textStyle="bold|bold" />
+            android:layout_height="wrap_content">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:fontFamily="@font/alex_brush"
-            android:padding="8dp"
-            android:text="@string/note_if_you_posted_something_please_wait_a_time_for_admin_approvement"
-            android:textColor="@color/red"
-            android:textSize="15sp" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/shareText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="16dp"
+                android:text="Let share information to other people"
+                android:textColor="#1976d2"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:padding="8dp"
-            app:cardCornerRadius="25dp"
-            app:cardElevation="@dimen/cardview_default_elevation"
-            app:strokeColor="@color/black"
-            app:strokeWidth="1dp">
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgShare"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:foregroundGravity="center"
+                android:scaleType="centerCrop"
+                android:src="@drawable/shareinfo"
+                android:theme="@style/userImageShape"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/shareText" />
 
-            <RelativeLayout
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/chooseCate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:text="* Choose Category"
+                android:textColor="#1976d2"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imgShare" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/chooseCate"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="8dp"
+                android:layout_toEndOf="@+id/chooseCate"
+                app:boxStrokeColor="@android:color/white"
+                app:endIconTint="#007FFF"
+                app:layout_constraintBottom_toBottomOf="@+id/chooseCate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/chooseCate"
+                app:layout_constraintTop_toTopOf="@+id/chooseCate">
+
+                <AutoCompleteTextView
+                    android:id="@+id/spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:backgroundTint="@color/white"
+                    android:completionThreshold="1"
+                    android:inputType="none"
+                    android:text="Choose Category"
+                    android:textColor="#007FFF" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/chooseCate"
+                android:layout_marginTop="50dp"
+                android:text="* Title"
+                android:textColor="#1976d2"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/chooseCate"
+                app:layout_constraintTop_toBottomOf="@+id/chooseCate" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/titleFieldLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp">
+                android:layout_below="@id/title"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:textColorHint="#007FFF"
+                app:layout_constraintEnd_toEndOf="@+id/title"
+                app:layout_constraintStart_toStartOf="@+id/title"
+                app:layout_constraintTop_toBottomOf="@+id/title">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/chooseCate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:fontFamily="@font/alex_brush"
-                    android:text="@string/choose_category"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+                <AutoCompleteTextView
+                    android:id="@+id/editTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@color/white"
+                    android:hint="@string/type_title_here"
+                    android:textColor="@color/black" />
 
+            </com.google.android.material.textfield.TextInputLayout>
 
-                <Spinner
-                    android:id="@+id/spinner"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/titleFieldLayout"
+                android:layout_marginTop="50dp"
+                android:text="* Description:"
+                android:textColor="#1976d2"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.363"
+                app:layout_constraintStart_toStartOf="@+id/titleFieldLayout"
+                app:layout_constraintTop_toBottomOf="@+id/titleFieldLayout" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/descFieldLayout"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:textColorHint="#007FFF"
+                app:boxStrokeColor="#1976d2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/description"
+                app:layout_constraintTop_toBottomOf="@+id/description">
+
+                <AutoCompleteTextView
+                    android:id="@+id/editDesc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_toEndOf="@+id/chooseCate"/>
+                    android:background="#ffffff"
+                    android:hint="Enter your description here"
+                    android:textColor="@android:color/black"
+                    app:layout_constraintTop_toBottomOf="@+id/description" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/chooseCate"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="@font/alex_brush"
-                    android:text="@string/title"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/titleFieldLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/title"
-                    android:layout_margin="10dp"
-                    android:padding="10dp">
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/chooseFile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="* Choose File"
+                android:textColor="#1976d2"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.044"
+                app:layout_constraintStart_toStartOf="@+id/descFieldLayout"
+                app:layout_constraintTop_toBottomOf="@+id/descFieldLayout"
+                app:layout_constraintVertical_bias="0.0" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/type_title_here" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/titleFieldLayout"
-                    android:layout_marginStart="10dp"
-                    android:fontFamily="@font/alex_brush"
-                    android:text="Description:"
-                    android:textSize="15sp" />
-
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/descFieldLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/description"
-                    android:layout_margin="10dp"
-                    android:padding="10dp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editDesc"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Enter your description here" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/postRecycler"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/descFieldLayout"
-                    android:layout_marginStart="10dp"
-                    android:orientation="vertical"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="2" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/chooseFile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/postRecycler"
-                    android:layout_marginStart="10dp"
-                    android:fontFamily="@font/alex_brush"
-                    android:text="Choose File"
-                    android:textSize="15sp" />
-
-                <ImageButton
-                    android:id="@+id/chooseProfileImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_below="@+id/postRecycler"
-                    android:layout_marginStart="40dp"
-                    android:layout_toEndOf="@+id/chooseFile"
-                    android:src="@drawable/ic_file_upload"/>
-            </RelativeLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/postRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/chooseFile"
+                app:layout_constraintTop_toBottomOf="@+id/chooseFile" />
+            <ImageButton
+                android:id="@+id/chooseProfileImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/chooseFile"
+                android:layout_marginEnd="100dp"
+                android:layout_toEndOf="@+id/chooseFile"
+                android:src="@drawable/ic_file_upload"
+                app:layout_constraintBottom_toBottomOf="@+id/chooseFile"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/chooseFile"
+                app:layout_constraintVertical_bias="0.619" />
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnCancel"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="85dp"
-                android:layout_marginTop="33dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="Cancel" />
+                android:layout_marginTop="32dp"
+                android:text="Cancel"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/postRecycler" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnPost"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="33dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="Post" />
-        </LinearLayout>
-    </LinearLayout>
+                android:text="Post"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.718"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btnCancel"
+                app:layout_constraintVertical_bias="0.0" />
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

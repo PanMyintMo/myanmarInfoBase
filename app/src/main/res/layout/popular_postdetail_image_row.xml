@@ -6,10 +6,9 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/detail_image"
-        android:src="@drawable/umbrella"
+        android:src="@drawable/ic_person"
+        android:scaleType="centerCrop"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
-
-    </com.google.android.material.imageview.ShapeableImageView>
+        android:layout_height="200dp"/>
 
 </LinearLayout>

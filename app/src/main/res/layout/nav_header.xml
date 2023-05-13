@@ -1,44 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="230dp"
+    android:background="@drawable/wave"
     android:orientation="vertical"
-    android:layout_height="wrap_content">
+    android:padding="10dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/navProfile"
-        style="@style/userImageShape"
-        android:src="@drawable/umbrella"
         android:layout_width="100dp"
-        android:theme="@style/userImageShape"
+        android:layout_height="100dp"
+        android:layout_marginTop="30dp"
         android:layout_gravity="center"
-        android:layout_marginTop="12dp"
-        android:layout_marginStart="8dp"
-        android:layout_height="100dp">
-    </com.google.android.material.imageview.ShapeableImageView>
+        android:src="@drawable/ic_person"
+        android:theme="@style/userImageShape" />
+
+
     <TextView
         android:id="@+id/userName"
-        android:text="User Name"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:layout_gravity="center"
-        android:layout_marginTop="8dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </TextView>
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"
+        android:text="User Name"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
     <TextView
         android:id="@+id/user_maile"
-        android:text="@string/eg_gmail_com"
-        android:textSize="16sp"
-        android:layout_marginTop="5dp"
-        android:layout_gravity="center"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </TextView>
-    <View
-        android:background="@color/underLine"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="30dp">
-    </View>
-
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:text="@string/eg_gmail_com"
+        android:textColor="@color/white"
+        android:textSize="18sp"/>
 </LinearLayout>

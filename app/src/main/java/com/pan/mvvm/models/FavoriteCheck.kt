@@ -10,7 +10,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class FavoriteCheck(
     @SerializedName("_id")
-    val _id: String,
+    val id: String,
     @SerializedName("user")
     val user: String
 ) : Parcelable

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,165 +14,189 @@
             android:id="@+id/trending_image"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            style="@style/userImageShape"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="25dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="5dp"
             android:padding="2dp"
-            android:src="@drawable/umbrella"
+            android:src="@drawable/ic_person"
             android:theme="@style/userImageShape"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:strokeWidth="2dp"
             tools:ignore="MissingConstraints" />
 
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="4dp"
             android:text="@string/user_name"
-            android:textStyle="bold"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:layout_marginTop="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.031"
             app:layout_constraintStart_toEndOf="@+id/trending_image"
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/post_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="5dp"
             android:text="@string/post_date"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
             app:layout_constraintEnd_toEndOf="@+id/user_name"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/user_name"
             app:layout_constraintTop_toBottomOf="@+id/user_name" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/postTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="8dp"
             android:padding="5dp"
-            android:textStyle="bold"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3"
             android:textSize="15sp"
-            android:layout_marginStart="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/post_date"
-            app:layout_constraintVertical_bias="0.0"
-            tools:layout_editor_absoluteX="0dp">
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/post_date">
 
-        </TextView>
+        </com.google.android.material.textview.MaterialTextView>
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:padding="5dp"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             android:text="@string/description"
-            app:layout_constraintTop_toBottomOf="@+id/postTitle"
-            tools:layout_editor_absoluteX="0dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/postTitle" />
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/imageDetailListAdapter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:padding="5dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:nestedScrollingEnabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/description"
-            app:layout_constraintVertical_bias="0.0"
-            tools:layout_editor_absoluteX="16dp">
+            app:layout_constraintVertical_bias="0.0">
 
         </androidx.recyclerview.widget.RecyclerView>
 
-        <LinearLayout
-            android:id="@+id/linOne"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="32dp"
+            android:contentDescription="TODO"
+            android:src="@drawable/ic_baseline_favorite"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageDetailListAdapter" />
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/favoriteText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/favorite_text"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView6"
+            app:layout_constraintStart_toEndOf="@+id/imageView6"
+            app:layout_constraintTop_toTopOf="@+id/imageView6"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:text="Views"
+            app:layout_constraintBottom_toBottomOf="@+id/viewCount"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/viewCount"
             app:layout_constraintTop_toBottomOf="@+id/imageDetailListAdapter"
-            tools:layout_editor_absoluteX="0dp">
-            <ImageView
-                android:layout_weight="0.3"
-                android:src="@drawable/ic_favorite"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:contentDescription="TODO">
-            </ImageView>
-            <TextView
-                android:hint="@string/favorite_text"
-                android:layout_weight="1"
-                android:id="@+id/favoriteText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            app:layout_constraintVertical_bias="1.0" />
 
-            </TextView>
-
-            <ImageView
-                android:layout_weight="0.3"
-                android:src="@drawable/ic_viewer"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                >
-            </ImageView>
-            <TextView
-                android:id="@+id/viewCount"
-                android:hint="@string/view_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </TextView>
-            <TextView
-                android:text="@string/view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                >
-
-            </TextView>
-        </LinearLayout>
-        <LinearLayout
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linOne"
-        android:orientation="horizontal"
-        android:weightSum="2"
-        android:padding="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.google.android.material.button.MaterialButton
-            android:layout_weight="1"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-            app:iconGravity="textStart"
-            app:icon="@drawable/ic_favorite"
-            android:text="@string/favorite"
-            android:textAllCaps="false"
-            android:padding="10dp"
-            android:drawableStart="@drawable/ic_favorite"
-            android:layout_margin="5dp"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/viewCount"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </com.google.android.material.button.MaterialButton>
-        <com.google.android.material.button.MaterialButton
-            android:layout_weight="1"
-            android:text="@string/share"
-            android:textAllCaps="false"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-            app:iconGravity="textStart"
-            app:icon="@drawable/ic_share"
-            android:drawableStart="@drawable/ic_share"
-            android:layout_margin="5dp"
-            android:padding="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/view_count"
+            app:layout_constraintEnd_toStartOf="@+id/textView5"
+            app:layout_constraintStart_toEndOf="@+id/imageView7"
+            app:layout_constraintStart_toStartOf="@+id/textView5"
+            app:layout_constraintTop_toBottomOf="@+id/imageDetailListAdapter"
+            tools:ignore="MissingConstraints" />
 
-        </com.google.android.material.button.MaterialButton>
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="100dp"
+            android:src="@drawable/ic_viewer"
+            app:layout_constraintBottom_toBottomOf="@+id/viewCount"
+            app:layout_constraintEnd_toStartOf="@+id/viewCount"
+            app:layout_constraintStart_toEndOf="@+id/favoriteText"
+            app:layout_constraintTop_toTopOf="@+id/viewCount" />
+
+
+        <!-- <LinearLayout
+         app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/linOne"
+         android:orientation="horizontal"
+         android:weightSum="2"
+         android:padding="10dp"
+         android:layout_marginEnd="10dp"
+         android:layout_marginStart="10dp"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content">
+         <com.google.android.material.button.MaterialButton
+             android:layout_weight="1"
+             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+             app:iconGravity="textStart"
+             app:icon="@drawable/ic_favorite"
+             android:text="@string/favorite"
+             android:textAllCaps="false"
+             android:padding="10dp"
+             android:drawableStart="@drawable/ic_favorite"
+             android:layout_margin="5dp"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content">
+         </com.google.android.material.button.MaterialButton>
+         <com.google.android.material.button.MaterialButton
+             android:layout_weight="1"
+             android:text="@string/share"
+             android:textAllCaps="false"
+             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+             app:iconGravity="textStart"
+             app:icon="@drawable/ic_share"
+             android:drawableStart="@drawable/ic_share"
+             android:layout_margin="5dp"
+             android:padding="5dp"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content">
+
+         </com.google.android.material.button.MaterialButton>
+     </LinearLayout>-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

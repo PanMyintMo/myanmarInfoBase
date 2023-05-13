@@ -1,5 +1,9 @@
 package com.pan.mvvm.adapter
 
+import android.content.Intent
+import android.graphics.PorterDuff
+import androidx.core.content.ContextCompat
+import com.pan.mvvm.R
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,23 +11,42 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.pan.mvvm.databinding.SingleCategoryRowItemBinding
-import com.pan.mvvm.models.FavoriteCheck
-import com.pan.mvvm.models.FavoriteRequestModel
+import com.pan.mvvm.models.FavoriteCheckResponse
 import com.pan.mvvm.models.SingleCateItem
-import com.pan.mvvm.utils.TokenManager
+import com.pan.mvvm.ui.DetailPostCategory
+import com.pan.mvvm.utils.Constants.CATA_KEY
 
-class SingleCateRowAdapter(private val listener: OnClickListener, tokenManager: TokenManager) :
+
+class SingleCateRowAdapter :
     RecyclerView.Adapter<SingleCateRowAdapter.SingleCateRowViewHolder>() {
 
     private var singleCateItemList = emptyList<SingleCateItem>()
+    private var cateFilterList = emptyList<SingleCateItem>()
+
+    private var isFavorite = false
     private lateinit var singleCategoryImageAdapter: SingleCategoryImageAdapter
 
 
-    // Get the user ID from the TokenManager
-    private val userId = tokenManager.getId()
+    fun setFavoriteOrNot(response: FavoriteCheckResponse?) {
+        this.isFavorite = response?.favorited ?: false
+
+        notifyDataSetChanged()
+    }
 
     fun setLatestPostItem(singleCateItemList: List<SingleCateItem>) {
         this.singleCateItemList = singleCateItemList
+        this.cateFilterList = singleCateItemList
+    }
+
+    fun filter(query: String?) {
+        query?.let {
+            cateFilterList = singleCateItemList.filter { singleCateItem ->
+                singleCateItem.title.contains(query, ignoreCase = true)
+            }
+        } ?: run {
+            cateFilterList = singleCateItemList
+        }
+        notifyDataSetChanged()
     }
 
     class SingleCateRowViewHolder(val binding: SingleCategoryRowItemBinding) :
@@ -35,43 +58,47 @@ class SingleCateRowAdapter(private val listener: OnClickListener, tokenManager: 
         val inflater = LayoutInflater.from(parent.context)
         val binding = SingleCategoryRowItemBinding.inflate(inflater, parent, false)
 
-
-
         return SingleCateRowViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: SingleCateRowViewHolder, position: Int) {
-        val singleCate = singleCateItemList[position]
+        val singleCate = cateFilterList[position]
         holder.binding.cateTitle.text = singleCate.title
+
         holder.binding.cateUserName.text = singleCate.username
         holder.binding.postDate.text = singleCate.createdAt.substring(0, 10)
         holder.binding.cateDescription.text = singleCate.description
         holder.binding.vCount.text = singleCate.viewcount.toString()
 
 
-        //Log.d("FAV",singleCate.id.toString())
+        // Change the favorite icon color based on the response from the API
 
-            listener.checkFavorite(
-                position,
-                FavoriteCheck(singleCate.id, userId.toString()))
-
-        holder.binding.btnFavorite.setOnClickListener {
-            listener.viewModelOnClick(
-                position,
-                favoriteRequestModel =
-                FavoriteRequestModel(
-                    singleCate.id,
-                    singleCate.username,
-                    singleCate.title,
-                    singleCate.cateId,
-                    singleCate.cateName,
-                    singleCate.files.toString()
+            if (isFavorite) {
+                holder.binding.favorite.setColorFilter(
+                    ContextCompat.getColor(holder.itemView.context, R.color.red),
+                    PorterDuff.Mode.SRC_IN
                 )
-            )
+            } else {
+                holder.binding.favorite.colorFilter = null
+            }
+
+
+        holder.binding.cateDescription.setOnClickListener {
+            val intent = Intent(holder.itemView.context, DetailPostCategory::class.java)
+            intent.putExtra("POST_ID", singleCate.id)
+
+            intent.putExtra(CATA_KEY, singleCate)
+
+            try {
+                holder.itemView.context.startActivity(intent)
+            } catch (e: Exception) {
+                Log.e("StartActivityError", e.message ?: "Unknown error")
+            }
         }
 
         Glide.with(holder.itemView.context).load(singleCate.userprofile)
             .into(holder.binding.singleImageProfile)
+
 
         singleCategoryImageAdapter = SingleCategoryImageAdapter(singleCate.files)
         holder.binding.slider.adapter = singleCategoryImageAdapter
@@ -80,15 +107,7 @@ class SingleCateRowAdapter(private val listener: OnClickListener, tokenManager: 
 
     }
 
-    override fun getItemCount(): Int = singleCateItemList.size
-
-    interface OnClickListener {
-        fun viewModelOnClick(position: Int, favoriteRequestModel: FavoriteRequestModel)
-
-        fun checkFavorite(position: Int, favCheck: FavoriteCheck)
-
-    }
-
+    override fun getItemCount(): Int = cateFilterList.size
 }
 
 

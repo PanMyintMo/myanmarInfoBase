@@ -5,10 +5,7 @@ import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pan.mvvm.models.LoginRequestModel
-import com.pan.mvvm.models.LoginResponse
-import com.pan.mvvm.models.RegisterRequestModel
-import com.pan.mvvm.models.RegisterResponse
+import com.pan.mvvm.models.*
 import com.pan.mvvm.repository.UserRepository
 import com.pan.mvvm.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -69,6 +66,20 @@ class AuthViewModel @Inject constructor(private val userRepository: UserReposito
         return result
     }
 
+    //reset password
+    val resetPasswordLiveData get() = userRepository.resetPassword
+    fun resetPassword(resetRequestModel: ResetRequestModel){
+        viewModelScope.launch {
+            userRepository.resetPassword(resetRequestModel)
+        }
+    }
 
+    //actual reset password
 
+    val passwordResetLiveData get() = userRepository.passwordReset
+    fun passwordReset(actualResetRequestModel: ActualResetRequestModel){
+        viewModelScope.launch {
+            userRepository.passwordReset(actualResetRequestModel)
+        }
+    }
 }

@@ -5,7 +5,8 @@
     android:layout_height="match_parent">
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/detailLatest_image"
-        android:src="@drawable/umbrella"
+        android:src="@drawable/ic_person"
+        android:scaleType="centerCrop"
         android:layout_width="match_parent"
         android:layout_height="200dp">
 

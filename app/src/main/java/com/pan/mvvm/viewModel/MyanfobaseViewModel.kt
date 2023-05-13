@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.pan.mvvm.models.FavoriteCheck
 import com.pan.mvvm.models.FavoriteRequestModel
+import com.pan.mvvm.models.ResetRequestModel
 import com.pan.mvvm.repository.MyanfobaseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -25,6 +26,14 @@ class MyanfobaseViewModel @Inject constructor(
         }
     }
 
+    //removeFavorteData
+    val removeFavoriteData get() = myanfobaseRepository.removeFavResponse
+    fun removeFromFavorite(favoriteCheck: FavoriteCheck) {
+        viewModelScope.launch {
+            myanfobaseRepository.removeFromFavorite(favoriteCheck)
+        }
+    }
+
     //addToFavorite
     val addToFavoriteLiveData get() = myanfobaseRepository.favoriteResponse
     fun addToFavorite(favoriteRequestModel: FavoriteRequestModel) {
@@ -32,6 +41,15 @@ class MyanfobaseViewModel @Inject constructor(
             myanfobaseRepository.addToFavorite(favoriteRequestModel)
         }
     }
+
+    //getAll Favorite post
+    val getAllFavPostLiveData get() = myanfobaseRepository.getAllFavPostLiveData
+    fun getAllFavPost(user:String){
+        viewModelScope.launch {
+            myanfobaseRepository.getAllFavPost(user)
+        }
+    }
+
     //create new post
     val createNewPostResponseDetail get() = myanfobaseRepository.newPostResponse
     fun createNewPost(
@@ -40,14 +58,13 @@ class MyanfobaseViewModel @Inject constructor(
         title: RequestBody,
         description: RequestBody,
         files: List<File>
-    ){
+    ) {
         viewModelScope.launch {
             try {
                 myanfobaseRepository.createNewPost(
-                    cateId,cateName,title,description,files
+                    cateId, cateName, title, description, files
                 )
-            }
-            catch (e:Exception){
+            } catch (e: Exception) {
                 Log.d("Error", e.message.toString())
             }
 
@@ -84,6 +101,7 @@ class MyanfobaseViewModel @Inject constructor(
             }
         }
     }
+
     //get UserLoginDetailResponse
     val getLoginDetailResponseLiveData get() = myanfobaseRepository.userLoginDetail
 
@@ -93,12 +111,37 @@ class MyanfobaseViewModel @Inject constructor(
         }
     }
 
+    //get category detail post
+    val getCategoryDetailPost get() = myanfobaseRepository.getCategoryDetailPostData
+    fun getCategoryDetailPost(id: String) {
+        viewModelScope.launch {
+            myanfobaseRepository.getCategoryDetailPost(id)
+        }
+    }
+
+
     //get SingleCategory Items
 
     val getAllCategorySingleLiveData get() = myanfobaseRepository.getSingleCateItem
     fun getSingleCateItem(cateName: String) {
         viewModelScope.launch {
             myanfobaseRepository.getSingleCateItem(cateName)
+        }
+    }
+
+    //get gold and fuel
+    val getGoldAndFuelResponseLiveData get() = myanfobaseRepository.getGoldAndFuelResponseItem
+    fun getGoldAndFuel() {
+        viewModelScope.launch {
+            myanfobaseRepository.getGoldAndFuel()
+        }
+    }
+
+    //get currency rate
+    val getCurrencyRateLiveData get() = myanfobaseRepository.getCurrencyResponse
+    fun getAllCurrencyRate() {
+        viewModelScope.launch {
+            myanfobaseRepository.getAllCurrencyRate()
         }
     }
 
@@ -125,6 +168,8 @@ class MyanfobaseViewModel @Inject constructor(
             myanfobaseRepository.getLatestPostItem()
         }
     }
+
+
 }
 
 

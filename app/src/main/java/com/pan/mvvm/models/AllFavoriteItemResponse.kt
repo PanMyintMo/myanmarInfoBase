@@ -8,11 +8,13 @@ import androidx.annotation.Keep
 
 @Keep
 @Parcelize
-data class Result(
+data class AllFavoritedItemResponseClass(
     @SerializedName("cateId")
     val cateId: String,
     @SerializedName("cateName")
     val cateName: String,
+    @SerializedName("createdAt")
+    val createdAt: String,
     @SerializedName("files")
     val files: String,
     @SerializedName("_id")
@@ -21,6 +23,10 @@ data class Result(
     val postId: String,
     @SerializedName("title")
     val title: String,
+    @SerializedName("updatedAt")
+    val updatedAt: String,
     @SerializedName("user")
-    val user: String
+    val user: String,
+    @SerializedName("__v")
+    val v: Int
 ) : Parcelable

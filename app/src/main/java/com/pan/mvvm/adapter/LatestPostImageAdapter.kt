@@ -25,7 +25,7 @@ class LatestPostImageAdapter(
         val view =
             LayoutInflater.from(context).inflate(R.layout.latest_post_image_row, parent, false)
 
-        return LatestPostImageAdapter.MyImageDetailHolder(view)
+        return MyImageDetailHolder(view)
     }
 
     override fun onBindViewHolder(holder: MyImageDetailHolder, position: Int) {

@@ -1,19 +1,19 @@
 package com.pan.mvvm.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.pan.mvvm.R
 import com.pan.mvvm.databinding.FragmentRegisterBinding
 import com.pan.mvvm.models.RegisterRequestModel
+import com.pan.mvvm.ui.MainActivity
 import com.pan.mvvm.utils.NetworkResult
 import com.pan.mvvm.utils.TokenManager
 import com.pan.mvvm.viewModel.AuthViewModel
@@ -31,12 +31,16 @@ class RegisterFragment : Fragment() {
     @Inject
     lateinit var tokenManager: TokenManager
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentRegisterBinding.inflate(layoutInflater, container, false)
+
+
 
 
         if (tokenManager.getToken() != null){
@@ -58,7 +62,7 @@ class RegisterFragment : Fragment() {
         }
 
 
-        binding.btnLogin.setOnClickListener {
+        binding.btnSignIn.setOnClickListener {
             findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
         }
 
@@ -68,9 +72,11 @@ class RegisterFragment : Fragment() {
     }
 
 
+
+
     private fun getUserRequest(): RegisterRequestModel {
-        val username = binding.txtUserName.text.toString()
-        val email = binding.txtEmail.text.toString()
+        val username = binding.userName.text.toString()
+        val email = binding.emailEt.text.toString()
         val pass = binding.txtPassword.text.toString()
         return RegisterRequestModel(username, email, pass)
     }
@@ -94,9 +100,6 @@ class RegisterFragment : Fragment() {
 
             when (it) {
                 is NetworkResult.Success -> {
-                    //token
-                //    tokenManager.saveToken(it.data!!.status)
-
                     Toast.makeText(requireContext(), "Register success", Toast.LENGTH_SHORT).show()
                     findNavController().navigate(R.id.action_registerFragment_to_mainFragment)
 
@@ -113,21 +116,19 @@ class RegisterFragment : Fragment() {
         }
     }
 
-
-
     override fun onResume() {
         super.onResume()
-        (activity as AppCompatActivity).supportActionBar?.hide()
+        (activity as MainActivity).setDrawerLocked(true)
     }
 
-    override fun onStop() {
-        super.onStop()
-        (activity as AppCompatActivity).supportActionBar?.show()
-
+    override fun onPause() {
+        super.onPause()
+        (activity as MainActivity).setDrawerLocked(false)
     }
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 }

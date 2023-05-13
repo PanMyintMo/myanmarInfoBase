@@ -3,20 +3,19 @@ package com.pan.mvvm.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.pan.mvvm.R
 import com.pan.mvvm.databinding.ActivityMainBinding
-import com.pan.mvvm.fragments.LoginFragment
 import com.pan.mvvm.utils.TokenManager
 import com.pan.mvvm.viewModel.MyanfobaseViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,9 +25,7 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
 
     private lateinit var toggle: ActionBarDrawerToggle
-
-    private lateinit var binding: ActivityMainBinding
-
+    lateinit var binding: ActivityMainBinding
 
     @Inject
     lateinit var tokenManager: TokenManager
@@ -41,12 +38,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
-
-        val actionBar = supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
-        actionBar?.setDisplayShowHomeEnabled(true)
-        actionBar?.setIcon(R.drawable.myanlogo)
-        actionBar?.setDisplayShowTitleEnabled(false)
 
 
         toggle = ActionBarDrawerToggle(
@@ -73,10 +64,18 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
 
                 R.id.save -> {
-                    Toast.makeText(this@MainActivity, "Save", Toast.LENGTH_SHORT).show()
+                val intent=Intent(this@MainActivity,FavoriteActivity::class.java)
+                    startActivity(intent)
+
+
                 }
                 R.id.nav_profile -> {
                     val intent = Intent(this@MainActivity, ProfileActivity::class.java)
+                    startActivity(intent)
+                }
+
+                R.id.about -> {
+                    val intent = Intent(this@MainActivity, AboutUsActivity::class.java)
                     startActivity(intent)
                 }
 
@@ -91,15 +90,17 @@ class MainActivity : AppCompatActivity() {
                             Snackbar.make(binding.root, "Declined", Snackbar.LENGTH_SHORT).show()
                         }
                         .setPositiveButton("Yes") { _, _ ->
-                            val intent = Intent(this@MainActivity, LoginFragment::class.java)
+                            // Clear user data
+                            tokenManager.clearUserData()
 
-                            intent.flags =
-                                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            startActivity(intent)
+                            // Set the checked item in the navigation view
+                            binding.navView.setCheckedItem(R.id.logout)
+
+                            // Close the drawer
+                            binding.drawerLayout.closeDrawer(GravityCompat.START)
                             finish()
-
-
                         }
+
                         .show()
                 }
 
@@ -148,28 +149,24 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.post_menu, menu)
-        return true
+    // Disable the navigation drawer in fragments
+    fun setDrawerLocked(shouldLock: Boolean) {
+        if (shouldLock) {
+            binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            toggle.isDrawerIndicatorEnabled = false
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        } else {
+            binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            toggle.isDrawerIndicatorEnabled = true
+            supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        }
     }
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        when (item.itemId) {
-            R.id.createPost -> {
-                showCreateNewPost()
-                return true
-            }
-        }
         if (toggle.onOptionsItemSelected(item)) {
             return true
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun showCreateNewPost() {
-        val intent = Intent(this, CreatePostActivity::class.java)
-        startActivity(intent)
     }
 }
