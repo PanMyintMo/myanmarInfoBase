@@ -20,7 +20,6 @@
     <string name="don_t_have_an_account_register_now">Don\'t have an account? Register Now</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="trending_post">Trending Post</string>
-    <string name="latest_post">Latest Post</string>
     <string name="category_name">Category Name</string>
     <string name="popular_title">Popular Title</string>
     <string name="user_profile">User Profile</string>
@@ -32,7 +31,7 @@
 
     <style name="RoundedSquare">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">15%</item>
+        <item name="cornerSize">5%</item>
     </style>
 
 
@@ -43,7 +42,6 @@
     <string name="description">Description</string>
     <string name="favorite_text">Favorite Text</string>
     <string name="view_count">View Count</string>
-    <string name="view">View</string>
     <string name="favorite">Favorite</string>
     <string name="share">Share</string>
     <string name="email">Email</string>
@@ -52,4 +50,28 @@
     <string name="password">Password</string>
     <string name="logout">Logout</string>
     <string name="my_profile">My Profile</string>
+    <string name="profile_detail">Profile Detail</string>
+    <string name="name">Name</string>
+    <string name="address">Address</string>
+    <string name="other">Other</string>
+    <string name="gender">Gender</string>
+    <string name="date_of_birth">Date Of Birth</string>
+    <string name="update_profile">Update Profile</string>
+    <string name="mgmg_gmail_com">mgmg@gmail.com</string>
+    <string name="like">Like</string>
+    <string name="change_password">Change Password</string>
+    <string name="categories">Categories</string>
+    <string name="theme">Theme</string>
+    <string name="setting">Setting</string>
+    <string name="_0">0</string>
+    <string name="posted_date">Posted Date</string>
+    <string name="create_post">Create Post</string>
+    <string name="let_s_share_our_information_to_other_people">Let\'s Share Our Information To Other People.</string>
+    <string name="here_you_can_share_your_experience_information_life_tips_and_other_knowledge_by_posting">Here! You can share your experience, information,life-tips and other knowledge by posting.</string>
+    <string name="note_if_you_posted_something_please_wait_a_time_for_admin_approvement">Note : If you posted something,please wait a time for admin approvement</string>
+    <string name="choose_category">Choose Category</string>
+    <string name="title">Title:</string>
+    <string name="type_title_here">Type title here...</string>
+    <string name="copy_right">Copyright %d by MyanmarDev</string>
+    <string name="latest_news">Latest News</string>
 </resources>

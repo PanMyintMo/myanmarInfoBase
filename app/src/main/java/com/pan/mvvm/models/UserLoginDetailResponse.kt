@@ -26,7 +26,7 @@ data class UserLoginDetailResponse(
     @SerializedName("login")
     val login: Boolean,
     @SerializedName("profilePicture")
-    val profilePicture: List<ProfilePictureX>,
+    val profilePicture: List<ProfilePicture>,
     @SerializedName("token")
     val token: String,
     @SerializedName("username")

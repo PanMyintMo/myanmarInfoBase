@@ -1,8 +1,12 @@
 package com.pan.mvvm.ui
 
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
@@ -10,22 +14,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.pan.mvvm.R
 import com.pan.mvvm.adapter.SingleCateRowAdapter
 import com.pan.mvvm.databinding.ActivitySingleCategoryBinding
+import com.pan.mvvm.models.FavoriteCheckResponse
+import com.pan.mvvm.utils.Constants.CAT_KEY
 import com.pan.mvvm.utils.NetworkResult
+import com.pan.mvvm.utils.TokenManager
 import com.pan.mvvm.viewModel.MyanfobaseViewModel
 import dagger.hilt.android.AndroidEntryPoint
-
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SingleCategoryActivity : AppCompatActivity() {
 
-    companion object {
-        const val CAT_KEY = "cat_key"
-    }
+    @Inject
+    lateinit var tokenManager: TokenManager
 
     private lateinit var binding: ActivitySingleCategoryBinding
     private val myanfobaseViewModel by viewModels<MyanfobaseViewModel>()
-    private var singleCateRowAdapter: SingleCateRowAdapter?= null
-
+    private var singleCateRowAdapter: SingleCateRowAdapter? = null
+    private var searchView: SearchView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,10 +43,8 @@ class SingleCategoryActivity : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
-
         val bundle: Bundle? = intent.extras
         val cateName = bundle?.getString(CAT_KEY)
-
         supportActionBar?.title = cateName.toString()
         binding.toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
 
@@ -49,23 +53,34 @@ class SingleCategoryActivity : AppCompatActivity() {
 
         // Initialize adapter
         singleCateRowAdapter = SingleCateRowAdapter()
+        // Set the adapter to your RecyclerView
+        binding.cateRowRecycler.adapter = singleCateRowAdapter
 
+        myanfobaseViewModel.checkFavoriteData.observe(this@SingleCategoryActivity) { checkFavResponse ->
+
+            Log.d("MyTag", "${checkFavResponse.data}")
+            val favorited = checkFavResponse.data?.favorited ?: false
+            val success = checkFavResponse.data?.success ?: true
+            val favoriteCheckResponse = FavoriteCheckResponse(favorited, success)
+
+            singleCateRowAdapter?.setFavoriteOrNot(favoriteCheckResponse)
+
+        }
         fetchSingleCateItem()
 
     }
 
     private fun fetchSingleCateItem() {
-
-        myanfobaseViewModel.getAllCategorySingleLiveData.observe(this){response ->
-           // binding.progressBar.isVisible = false
-
+        myanfobaseViewModel.getAllCategorySingleLiveData.observe(this) { response ->
+            // binding.progressBar.isVisible = false
             when (response) {
                 is NetworkResult.Success -> {
                     val singleCateItemList = response.data
+                   // Log.d("List","$singleCateItemList")
                     singleCateItemList?.let {
-                        binding.cateRowRecycler.layoutManager  =
+                        binding.cateRowRecycler.layoutManager =
                             LinearLayoutManager(
-                              this,
+                                this,
                                 LinearLayoutManager.VERTICAL,
                                 false
                             )
@@ -79,15 +94,35 @@ class SingleCategoryActivity : AppCompatActivity() {
 
                 }
                 is NetworkResult.Loading -> {
-                  //  binding.progressBar.isVisible = true
+                    //  binding.progressBar.isVisible = true
 
                 }
+                else -> {}
             }
         }
-
-
     }
 
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+        menuInflater.inflate(R.menu.search_category, menu)
+
+        val search = menu?.findItem(R.id.searchCategory)
+        searchView = search?.actionView as? SearchView
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                singleCateRowAdapter?.filter(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                singleCateRowAdapter?.filter(newText)
+                return true
+            }
+        })
+
+        return true
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {

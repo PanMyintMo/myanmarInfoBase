@@ -1,18 +1,19 @@
 package com.pan.mvvm.fragments
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.pan.mvvm.R
 import com.pan.mvvm.databinding.FragmentLoginBinding
 import com.pan.mvvm.models.LoginRequestModel
+import com.pan.mvvm.ui.MainActivity
 import com.pan.mvvm.utils.NetworkResult
 import com.pan.mvvm.utils.TokenManager
 import com.pan.mvvm.viewModel.AuthViewModel
@@ -47,6 +48,24 @@ class LoginFragment : Fragment() {
             }
 
         }
+
+        binding.resetPassword.setOnClickListener {
+
+
+            val data=activity?.intent?.data
+
+            val resetString = data?.getQueryParameter("resetString") ?: ""
+
+
+            /*  val uri = Uri.parse("https://www.myanfobase.com/api/users/requestPasswordReset/")
+              val resetString = uri.getQueryParameters("resetString") ?: ""
+  */
+            val action =
+                LoginFragmentDirections.actionLoginFragmentToVerifyResetEmail(resetString.toString())
+            findNavController().navigate(action)
+
+        }
+
         binding.btnSignUp.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -55,15 +74,12 @@ class LoginFragment : Fragment() {
         return binding.root
     }
 
-
     private fun getUserRequest(): LoginRequestModel {
-        val loginemail = binding.txtEmail.text.toString()
+        val loginemail = binding.emailEt.text.toString()
         val loginpassword = binding.txtPassword.text.toString()
-
 
         return LoginRequestModel(loginemail, loginpassword)
     }
-
 
     private fun checkLoginDetail(): Pair<Boolean, String> {
 
@@ -94,30 +110,25 @@ class LoginFragment : Fragment() {
                 is NetworkResult.Loading -> {
                     binding.progressBar.isVisible = true
                 }
+                else -> {}
             }
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        (activity as AppCompatActivity).supportActionBar?.hide()
-    }
 
     override fun onResume() {
         super.onResume()
-        (activity as AppCompatActivity).supportActionBar?.hide()
+        (activity as MainActivity).setDrawerLocked(true)
     }
 
-
-    override fun onStop() {
-        super.onStop()
-        (activity as AppCompatActivity).supportActionBar?.show()
-
+    override fun onPause() {
+        super.onPause()
+        (activity as MainActivity).setDrawerLocked(false)
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 }

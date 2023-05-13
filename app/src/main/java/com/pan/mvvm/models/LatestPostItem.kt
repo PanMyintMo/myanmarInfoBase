@@ -17,7 +17,7 @@ data class LatestPostItem(
     @SerializedName("description")
     val description: String,
     @SerializedName("files")
-    val files: List<FileY>,
+    val files: List<ProfilePicture>,
     @SerializedName("_id")
     val id: String,
     @SerializedName("postAccept")

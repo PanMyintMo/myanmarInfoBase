@@ -8,11 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.pan.mvvm.R
 import com.pan.mvvm.databinding.LatestPostImageRowBinding
-import com.pan.mvvm.models.FileY
+import com.pan.mvvm.models.ProfilePicture
 
 class LatestPostImageAdapter(
     private var context: Context,
-    private var latestPostImageList: List<FileY>
+    private var latestPostImageList: List<ProfilePicture>
 ) : RecyclerView.Adapter<LatestPostImageAdapter.MyImageDetailHolder>() {
     class MyImageDetailHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -25,7 +25,7 @@ class LatestPostImageAdapter(
         val view =
             LayoutInflater.from(context).inflate(R.layout.latest_post_image_row, parent, false)
 
-        return LatestPostImageAdapter.MyImageDetailHolder(view)
+        return MyImageDetailHolder(view)
     }
 
     override fun onBindViewHolder(holder: MyImageDetailHolder, position: Int) {

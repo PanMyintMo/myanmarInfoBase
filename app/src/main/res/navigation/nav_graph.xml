@@ -19,6 +19,12 @@
             android:id="@+id/action_loginFragment_pop_including_registerFragment"
             app:popUpTo="@id/registerFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_loginFragment_to_verifyResetEmail"
+            app:destination="@id/verifyResetEmail" />
+        <argument
+            android:name="ResetEmail"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -75,6 +81,22 @@
         <argument
             android:name="latestArgs"
             app:argType="com.pan.mvvm.models.LatestPostItem" />
+    </fragment>
+    <fragment
+        android:id="@+id/verifyResetEmail"
+        android:name="com.pan.mvvm.fragments.VerifyResetEmailFragment"
+        android:label="fragment_verify_reset_email"
+        tools:layout="@layout/fragment_verify_reset_email" >
+        <action
+            android:id="@+id/action_verifyResetEmail_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_verifyResetEmail_to_loginFragment2"
+            app:popUpTo="@id/loginFragment"
+            app:launchSingleTop="true" />
+        <argument
+            android:name="resetString"
+            app:argType="string" />
     </fragment>
 
 </navigation>

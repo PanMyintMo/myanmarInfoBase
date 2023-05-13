@@ -6,14 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.pan.mvvm.R
 import com.pan.mvvm.databinding.FragmentRegisterBinding
 import com.pan.mvvm.models.RegisterRequestModel
+import com.pan.mvvm.ui.MainActivity
 import com.pan.mvvm.utils.NetworkResult
 import com.pan.mvvm.utils.TokenManager
 import com.pan.mvvm.viewModel.AuthViewModel
@@ -31,6 +31,8 @@ class RegisterFragment : Fragment() {
     @Inject
     lateinit var tokenManager: TokenManager
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,7 +41,11 @@ class RegisterFragment : Fragment() {
         _binding = FragmentRegisterBinding.inflate(layoutInflater, container, false)
 
 
+
+
         if (tokenManager.getToken() != null){
+
+           // Log.d("TOKEN", tokenManager.getToken()!!)
             findNavController().navigate(R.id.action_registerFragment_to_mainFragment)
         }
         binding.btnSignUp.setOnClickListener {
@@ -53,11 +59,10 @@ class RegisterFragment : Fragment() {
             else{
                 binding.txtError.text=validationResult.second
             }
-            //  findNavController().navigate(R.id.action_registerFragment_to_mainFragment)
         }
 
 
-        binding.btnLogin.setOnClickListener {
+        binding.btnSignIn.setOnClickListener {
             findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
         }
 
@@ -67,16 +72,16 @@ class RegisterFragment : Fragment() {
     }
 
 
+
+
     private fun getUserRequest(): RegisterRequestModel {
-        val username = binding.txtUserName.text.toString()
-        val email = binding.txtEmail.text.toString()
+        val username = binding.userName.text.toString()
+        val email = binding.emailEt.text.toString()
         val pass = binding.txtPassword.text.toString()
         return RegisterRequestModel(username, email, pass)
     }
 
     private fun checkDetailRegister(): Pair<Boolean, String> {
-
-    //    val confirmPass = binding.txtConfirmPassword.text.toString()
 
         val userRequestModel = getUserRequest()
 
@@ -86,42 +91,15 @@ class RegisterFragment : Fragment() {
             userRequestModel.password
         )
 
-/*        if (TextUtils.isEmpty(username)) {
-            binding.txtUserName.error = "Name is required"
-            binding.txtUserName.requestFocus()
-        } else if (TextUtils.isEmpty(email)) {
-            binding.txtEmail.error = "Email is required"
-            binding.txtEmail.requestFocus()
-        } else if (TextUtils.isEmpty(pass)) {
-            binding.txtPassword.error = "Password is required"
-            binding.txtPassword.requestFocus()
-        } else if (TextUtils.isEmpty(confirmPass)) {
-            binding.txtConfirmPassword.error = "Confirm Password is required"
-            binding.txtConfirmPassword.requestFocus()
-        } else {
-            if (pass != confirmPass) {
-                Toast.makeText(
-                    requireContext(),
-                    "Password are not matched",
-                    Toast.LENGTH_SHORT
-                ).show()
-                binding.txtPassword.requestFocus()
-                binding.txtConfirmPassword.requestFocus()
-            } else {
-                setupRegister(username, email, pass)
-            }
-        }*/
+
     }
 
     private fun bindObservers() {
-        authViewModel.registerResponseLiveData.observe(viewLifecycleOwner, Observer {
+        authViewModel.registerResponseLiveData.observe(viewLifecycleOwner){
             binding.progressBar.isVisible = false
 
             when (it) {
                 is NetworkResult.Success -> {
-                    //token
-                //    tokenManager.saveToken(it.data!!.status)
-
                     Toast.makeText(requireContext(), "Register success", Toast.LENGTH_SHORT).show()
                     findNavController().navigate(R.id.action_registerFragment_to_mainFragment)
 
@@ -135,24 +113,22 @@ class RegisterFragment : Fragment() {
                 }
 
             }
-        })
+        }
     }
-
-
 
     override fun onResume() {
         super.onResume()
-        (activity as AppCompatActivity).supportActionBar?.hide()
+        (activity as MainActivity).setDrawerLocked(true)
     }
 
-    override fun onStop() {
-        super.onStop()
-        (activity as AppCompatActivity).supportActionBar?.show()
-
+    override fun onPause() {
+        super.onPause()
+        (activity as MainActivity).setDrawerLocked(false)
     }
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 }

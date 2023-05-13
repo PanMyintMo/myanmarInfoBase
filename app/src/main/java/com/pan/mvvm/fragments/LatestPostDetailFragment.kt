@@ -44,7 +44,7 @@ class LatestPostDetailFragment : Fragment() {
         binding?.imageDetailListAdapter?.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        _binding!!.favoriteText.text = args.latestArgs.v.toString()
+        _binding!!.favoriteText.text = args.latestArgs.viewcount.toString()
         _binding!!.viewCount.text = args.latestArgs.viewcount.toString()
 
 

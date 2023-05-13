@@ -12,11 +12,23 @@ import com.pan.mvvm.models.PopularItem
 class PopularPostAdapter : RecyclerView.Adapter<PopularPostAdapter.MyViewHolder>() {
 
     private var popularList = emptyList<PopularItem>()
+    private var filteredPopularList = emptyList<PopularItem>()
 
     fun setPopularItem(popularList:List<PopularItem>){
         this.popularList= popularList
+        this.filteredPopularList = popularList
     }
 
+    fun filter(query: String?) {
+        query?.let {
+            filteredPopularList = popularList.filter { popularList ->
+                popularList.title.contains(query, ignoreCase = true)
+            }
+        } ?: run {
+            filteredPopularList = popularList
+        }
+        notifyDataSetChanged()
+    }
 
     class MyViewHolder(val binding: PopularRowBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -28,7 +40,7 @@ class PopularPostAdapter : RecyclerView.Adapter<PopularPostAdapter.MyViewHolder>
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val popularList=popularList[position]
+        val popularList=filteredPopularList[position]
         holder.binding.popularTitle.text= popularList.title
         Glide.with(holder.itemView.context).load(popularList.files[0].filePath).into(holder.binding.postImage)
 
@@ -38,6 +50,5 @@ class PopularPostAdapter : RecyclerView.Adapter<PopularPostAdapter.MyViewHolder>
 
         }
     }
-
-    override fun getItemCount(): Int =popularList.size
+    override fun getItemCount(): Int =filteredPopularList.size
 }

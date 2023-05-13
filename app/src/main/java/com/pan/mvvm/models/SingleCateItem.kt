@@ -17,7 +17,7 @@ data class SingleCateItem(
     @SerializedName("description")
     val description: String,
     @SerializedName("files")
-    val files: List<SingleCateItems>,
+    val files: List<ProfilePicture>,
     @SerializedName("_id")
     val id: String,
     @SerializedName("postAccept")

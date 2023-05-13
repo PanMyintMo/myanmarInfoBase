@@ -1,5 +1,6 @@
 package com.pan.mvvm.adapter
 
+
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,13 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pan.mvvm.databinding.CategoryRowBinding
 import com.pan.mvvm.models.CategoryItem
 import com.pan.mvvm.ui.SingleCategoryActivity
+import com.pan.mvvm.utils.Constants.CAT_KEY
 
 class CategoryRowAdapter : RecyclerView.Adapter<CategoryRowAdapter.MyViewHolder>() {
 
     private var cateItem = emptyList<CategoryItem>()
 
     fun setCateNamList(cateItemList: List<CategoryItem>?) {
-        this.cateItem = cateItemList!!
+        this.cateItem = cateItemList ?: emptyList()
 
     }
 
@@ -22,9 +24,10 @@ class CategoryRowAdapter : RecyclerView.Adapter<CategoryRowAdapter.MyViewHolder>
 
         fun bind(cateItem: CategoryItem) {
             binding.btnCate.text = cateItem.catename
+
             binding.btnCate.setOnClickListener {
                 val intent = Intent(itemView.context, SingleCategoryActivity::class.java)
-                intent.putExtra(SingleCategoryActivity.CAT_KEY, cateItem.catename)
+                intent.putExtra(CAT_KEY, cateItem.catename)
                 itemView.context.startActivity(intent)
             }
         }
@@ -48,6 +51,8 @@ class CategoryRowAdapter : RecyclerView.Adapter<CategoryRowAdapter.MyViewHolder>
     }
 
     override fun getItemCount() = cateItem.size
+
+
 
 }
 

@@ -4,12 +4,16 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.pan.mvvm.R
 import com.pan.mvvm.databinding.ActivityMainBinding
 import com.pan.mvvm.utils.TokenManager
@@ -21,20 +25,21 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
 
     private lateinit var toggle: ActionBarDrawerToggle
-
-    private lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
 
     @Inject
     lateinit var tokenManager: TokenManager
     private val myanfobaseViewModel by viewModels<MyanfobaseViewModel>()
 
+    private var isDarkMode = false // keep track of the current mode
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
-        val actionBar = supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
+
+
         toggle = ActionBarDrawerToggle(
             this@MainActivity,
             binding.drawerLayout,
@@ -59,13 +64,44 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
 
                 R.id.save -> {
-                    Toast.makeText(this@MainActivity, "Save", Toast.LENGTH_SHORT).show()
+                val intent=Intent(this@MainActivity,FavoriteActivity::class.java)
+                    startActivity(intent)
+
 
                 }
                 R.id.nav_profile -> {
-
-                    val intent= Intent(this@MainActivity,ProfileActivity::class.java)
+                    val intent = Intent(this@MainActivity, ProfileActivity::class.java)
                     startActivity(intent)
+                }
+
+                R.id.about -> {
+                    val intent = Intent(this@MainActivity, AboutUsActivity::class.java)
+                    startActivity(intent)
+                }
+
+                R.id.theme -> {
+                    toggleNightMode()
+                }
+                R.id.logout -> {
+                    MaterialAlertDialogBuilder(this)
+                        .setTitle("Confirm exit?")
+                        .setMessage("Do you want to log out from this app?")
+                        .setNegativeButton("No") { _, _ ->
+                            Snackbar.make(binding.root, "Declined", Snackbar.LENGTH_SHORT).show()
+                        }
+                        .setPositiveButton("Yes") { _, _ ->
+                            // Clear user data
+                            tokenManager.clearUserData()
+
+                            // Set the checked item in the navigation view
+                            binding.navView.setCheckedItem(R.id.logout)
+
+                            // Close the drawer
+                            binding.drawerLayout.closeDrawer(GravityCompat.START)
+                            finish()
+                        }
+
+                        .show()
                 }
 
                 else -> {
@@ -75,6 +111,21 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+        // set the initial mode
+        isDarkMode = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
+    }
+
+    private fun toggleNightMode() {
+
+        isDarkMode = !isDarkMode
+        if (isDarkMode) {
+            // Switch to night mode
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            // Switch to day mode
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+        recreate() // recreate the activity to apply the new theme
     }
 
     private fun fetchUserLoginDetailResponse() {
@@ -83,10 +134,31 @@ class MainActivity : AppCompatActivity() {
             val navHeader = navigationView.getHeaderView(0)
             val nvEmail = navHeader.findViewById(R.id.user_maile) as TextView
             val nvName = navHeader.findViewById(R.id.userName) as TextView
+            val navProfile = navHeader.findViewById(R.id.navProfile) as ImageView
+
             // for navigation header's email and user name
             nvEmail.text = userLoginDetailResponse.email
             nvName.text = userLoginDetailResponse.username
 
+            // check if the profile picture list is not empty before accessing its elements
+            if (userLoginDetailResponse.profilePicture.isNotEmpty()) {
+                Glide.with(this).load(userLoginDetailResponse.profilePicture[0].filePath)
+                    .into(navProfile)
+            }
+
+        }
+    }
+
+    // Disable the navigation drawer in fragments
+    fun setDrawerLocked(shouldLock: Boolean) {
+        if (shouldLock) {
+            binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            toggle.isDrawerIndicatorEnabled = false
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        } else {
+            binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            toggle.isDrawerIndicatorEnabled = true
+            supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
     }
 
@@ -97,5 +169,4 @@ class MainActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
 }
