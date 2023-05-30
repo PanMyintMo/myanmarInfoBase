@@ -113,27 +113,33 @@ class MyanfobaseRepository @Inject constructor(
     }
 
     //get all favorite post
-    private val _getAllFavPostLiveData =
-        MutableLiveData<NetworkResult<AllFavoritedItemResponseClass>>()
-    val getAllFavPostLiveData: LiveData<NetworkResult<AllFavoritedItemResponseClass>> get() = _getAllFavPostLiveData
+    private val _getAllFavPostLiveData = MutableLiveData<NetworkResult<GetAllFavoriteResponse>>()
+    val getAllFavPostLiveData: LiveData<NetworkResult<GetAllFavoriteResponse>> get() = _getAllFavPostLiveData
 
-    suspend fun getAllFavPost(user: String) {
+    suspend fun getAllFavPost(user: UserRequestFavorite) {
         _getAllFavPostLiveData.postValue(NetworkResult.Loading())
-        val response = myanFoBaseApi.getAllFavPosts(user)
-        if (response.isSuccessful && response.body() !=null){
-            _getAllFavPostLiveData.postValue(NetworkResult.Success(response.body()!!))
-        }
-        else if (response.errorBody()!=null){
-            val errorText = response.errorBody()!!.charStream().readText()
-            val errorMessage = try {
-                JSONObject(errorText).getString("message")
-            } catch (e: JSONException) {
-                errorText
+
+        try {
+            val response = myanFoBaseApi.getAllFavPosts(user)
+            if (response.isSuccessful) {
+                val data = response.body()
+                if (data != null) {
+                    _getAllFavPostLiveData.postValue(NetworkResult.Success(data))
+                } else {
+                    _getAllFavPostLiveData.postValue(NetworkResult.Error("Empty response"))
+                }
+            } else {
+                val errorBody = response.errorBody()?.charStream()?.readText()
+                val errorMessage = try {
+                    JSONObject(errorBody.toString()).getString("message")
+                } catch (e: JSONException) {
+                    "Error: ${response.code()}"
+                }
+                _getAllFavPostLiveData.postValue(NetworkResult.Error(errorMessage))
             }
-            _getAllFavPostLiveData.postValue(NetworkResult.Error(errorMessage))
-        }
-        else    {
-            _getAllFavPostLiveData.postValue(NetworkResult.Error("Something wrong"))
+        } catch (e: Exception) {
+            Log.e("API Request", "Exception: ${e.message}")
+            _getAllFavPostLiveData.postValue(NetworkResult.Error(e.message))
         }
     }
 

@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.pan.mvvm.models.FavoriteCheck
 import com.pan.mvvm.models.FavoriteRequestModel
-import com.pan.mvvm.models.ResetRequestModel
+import com.pan.mvvm.models.UserRequestFavorite
 import com.pan.mvvm.repository.MyanfobaseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -44,7 +44,7 @@ class MyanfobaseViewModel @Inject constructor(
 
     //getAll Favorite post
     val getAllFavPostLiveData get() = myanfobaseRepository.getAllFavPostLiveData
-    fun getAllFavPost(user:String){
+    fun getAllFavPost(user:UserRequestFavorite){
         viewModelScope.launch {
             myanfobaseRepository.getAllFavPost(user)
         }

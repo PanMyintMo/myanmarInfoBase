@@ -1,5 +1,6 @@
 package com.pan.mvvm.ui
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
@@ -45,7 +46,7 @@ class DetailPostCategory : AppCompatActivity() {
         //to get post id
         if (intent.hasExtra("POST_ID")) {
             id = intent.extras?.getString("POST_ID")
-            //Toast.makeText(this@DetailPostCategory, "$id", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this@DetailPostCategory, "$id", Toast.LENGTH_SHORT).show()
         }
 
         if (intent.hasExtra(CATA_KEY)) {
@@ -93,6 +94,7 @@ class DetailPostCategory : AppCompatActivity() {
             when (response) {
                 is NetworkResult.Success -> {
                     removeFavoriteCheck = response.data?.success!!
+
                 }
                 is NetworkResult.Loading -> {
 
@@ -117,7 +119,7 @@ class DetailPostCategory : AppCompatActivity() {
                     singleCateItem?.title ?: "",
                     singleCateItem?.cateId ?: "",
                     singleCateItem?.cateName ?: "",
-                    singleCateItem?.files.toString()
+                    singleCateItem?.files?.get(0)?.filePath.toString()
                 )
             )
             binding.imageView6.setColorFilter(
@@ -132,6 +134,12 @@ class DetailPostCategory : AppCompatActivity() {
             Toast.makeText(this@DetailPostCategory, "Remove Success favorite", Toast.LENGTH_SHORT)
                 .show()
 
+            //Notify GetAllFavoriteAdapter about unfavorite
+
+            val resultIntent=Intent().apply {
+                putExtra("POST_ID",id.toString())
+            }
+            setResult(Activity.RESULT_OK,resultIntent)
         }
     }
 

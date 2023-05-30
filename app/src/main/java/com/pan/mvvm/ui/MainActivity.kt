@@ -39,13 +39,14 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-
+        // Set up the ActionBarDrawerToggle
         toggle = ActionBarDrawerToggle(
             this@MainActivity,
             binding.drawerLayout,
             R.string.open,
             R.string.close
         )
+
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.isDrawerIndicatorEnabled = true
         toggle.syncState()
@@ -64,14 +65,18 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
 
                 R.id.save -> {
-                val intent=Intent(this@MainActivity,FavoriteActivity::class.java)
+                    val intent = Intent(this@MainActivity, FavoriteActivity::class.java)
                     startActivity(intent)
 
 
                 }
+
                 R.id.nav_profile -> {
                     val intent = Intent(this@MainActivity, ProfileActivity::class.java)
                     startActivity(intent)
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+
+
                 }
 
                 R.id.about -> {
@@ -82,6 +87,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.theme -> {
                     toggleNightMode()
                 }
+
                 R.id.logout -> {
                     MaterialAlertDialogBuilder(this)
                         .setTitle("Confirm exit?")
@@ -110,6 +116,7 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+
 
         // set the initial mode
         isDarkMode = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
@@ -161,7 +168,6 @@ class MainActivity : AppCompatActivity() {
             supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (toggle.onOptionsItemSelected(item)) {

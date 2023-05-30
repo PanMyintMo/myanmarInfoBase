@@ -23,8 +23,8 @@ interface MyanFoBaseApi {
 
     @POST("getFavposts")
     suspend fun getAllFavPosts(
-        @Body user: String
-    ): Response<AllFavoritedItemResponseClass>
+        @Body user: UserRequestFavorite
+    ): Response<GetAllFavoriteResponse>
 
 
     @GET("currency/getcurrency")

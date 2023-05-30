@@ -32,7 +32,6 @@ class SingleCategoryActivity : AppCompatActivity() {
     private val myanfobaseViewModel by viewModels<MyanfobaseViewModel>()
     private var singleCateRowAdapter: SingleCateRowAdapter? = null
     private var searchView: SearchView? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySingleCategoryBinding.inflate(layoutInflater)
@@ -56,18 +55,7 @@ class SingleCategoryActivity : AppCompatActivity() {
         // Set the adapter to your RecyclerView
         binding.cateRowRecycler.adapter = singleCateRowAdapter
 
-        myanfobaseViewModel.checkFavoriteData.observe(this@SingleCategoryActivity) { checkFavResponse ->
-
-            Log.d("MyTag", "${checkFavResponse.data}")
-            val favorited = checkFavResponse.data?.favorited ?: false
-            val success = checkFavResponse.data?.success ?: true
-            val favoriteCheckResponse = FavoriteCheckResponse(favorited, success)
-
-            singleCateRowAdapter?.setFavoriteOrNot(favoriteCheckResponse)
-
-        }
         fetchSingleCateItem()
-
     }
 
     private fun fetchSingleCateItem() {

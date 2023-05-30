@@ -13,10 +13,8 @@ import com.pan.mvvm.utils.Constants.CAT_KEY
 class CategoryRowAdapter : RecyclerView.Adapter<CategoryRowAdapter.MyViewHolder>() {
 
     private var cateItem = emptyList<CategoryItem>()
-
     fun setCateNamList(cateItemList: List<CategoryItem>?) {
         this.cateItem = cateItemList ?: emptyList()
-
     }
 
     class MyViewHolder(private val binding: CategoryRowBinding) :
@@ -31,7 +29,6 @@ class CategoryRowAdapter : RecyclerView.Adapter<CategoryRowAdapter.MyViewHolder>
                 itemView.context.startActivity(intent)
             }
         }
-
         companion object {
             fun from(parent: ViewGroup): MyViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
@@ -51,8 +48,6 @@ class CategoryRowAdapter : RecyclerView.Adapter<CategoryRowAdapter.MyViewHolder>
     }
 
     override fun getItemCount() = cateItem.size
-
-
 
 }
 

@@ -2,16 +2,12 @@ package com.pan.mvvm.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.SearchView
 import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.MaterialToolbar
@@ -33,7 +29,6 @@ class MainFragment : Fragment() {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
-    private var toggle: ActionBarDrawerToggle? = null
     private lateinit var popularPostAdapter: PopularPostAdapter
     private lateinit var latestPostAdapter: LatestPostAdapter
     private val myanfobaseViewModel by viewModels<MyanfobaseViewModel>()
@@ -46,17 +41,15 @@ class MainFragment : Fragment() {
         popularPostAdapter = PopularPostAdapter()
         latestPostAdapter = LatestPostAdapter()
 
-
         bindObserversForPopularItem()
         bindObserversForLatestPostItem()
-        
+
         //getAllPopularItem
         myanfobaseViewModel.getAllPopularPostItem()
         //getLatestPostItem
         myanfobaseViewModel.getLatestPostItem()
 
         //Go to Categories Activity
-
         binding.category.setOnClickListener {
             val intent = Intent(requireContext(), CategoryActivity::class.java)
             startActivity(intent)
@@ -72,19 +65,19 @@ class MainFragment : Fragment() {
             startActivity(intent)
         }
 
-         binding.search.setOnQueryTextListener(object:SearchView.OnQueryTextListener,
-              androidx.appcompat.widget.SearchView.OnQueryTextListener {
-              override fun onQueryTextSubmit(p0: String?): Boolean {
-                  return true
-              }
+        binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                return true
+            }
 
-              override fun onQueryTextChange(newText: String?): Boolean {
-                  popularPostAdapter.filter(newText)
-                  latestPostAdapter.filter(newText)
-                  return true
-              }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                popularPostAdapter.filter(newText)
+                latestPostAdapter.filter(newText)
+                return true
+            }
 
-          })
+        })
         return binding.root
     }
 
@@ -94,31 +87,9 @@ class MainFragment : Fragment() {
 
         val toolbar = requireView().findViewById<MaterialToolbar>(R.id.toolbar)
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
-
         toolbar.setLogo(R.drawable.myanlogo)
-        val drawerLayout = view.findViewById<DrawerLayout>(R.id.drawerLayout)
-        toggle = ActionBarDrawerToggle(requireActivity(), drawerLayout, toolbar, R.string.open, R.string.close)
-
-        drawerLayout?.let {
-            toggle?.let { t ->
-                it.addDrawerListener(t)
-                t.syncState()
-            }
-        }
-
-        toolbar?.setNavigationIcon(R.drawable.ic_drawer_24)
-
-        toolbar?.setNavigationOnClickListener {
-            drawerLayout?.let {
-                if (it.isDrawerOpen(GravityCompat.START)) {
-                    it.closeDrawer(GravityCompat.START)
-                    Log.d("Drawer" , "$drawerLayout")
-                } else {
-                    it.openDrawer(GravityCompat.START)
-                }
-            }
-        }
     }
+
 
     private fun bindObserversForLatestPostItem() {
         myanfobaseViewModel.getAllLatestPostLiveData.observe(viewLifecycleOwner) { response ->
@@ -137,6 +108,7 @@ class MainFragment : Fragment() {
                         binding.latestRecycler.adapter = latestPostAdapter
                     }
                 }
+
                 is NetworkResult.Error -> {
                     MaterialAlertDialogBuilder(requireContext())
                         .setMessage(response.message)
@@ -146,10 +118,12 @@ class MainFragment : Fragment() {
                         .show()
 
                 }
+
                 is NetworkResult.Loading -> {
                     binding.progressBar.isVisible = true
 
                 }
+
                 else -> {}
             }
         }
@@ -177,6 +151,7 @@ class MainFragment : Fragment() {
 
                     }
                 }
+
                 is NetworkResult.Error -> {
                     MaterialAlertDialogBuilder(requireContext())
                         .setMessage(response.message)
@@ -186,9 +161,11 @@ class MainFragment : Fragment() {
                         .show()
 
                 }
+
                 is NetworkResult.Loading -> {
                     binding.progressBar.isVisible = true
                 }
+
                 else -> {}
             }
         }

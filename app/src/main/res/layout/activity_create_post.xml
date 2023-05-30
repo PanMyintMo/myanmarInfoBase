@@ -11,6 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#ffffff"
+        android:translationZ="0dp"
+        android:elevation="0dp"
+        android:stateListAnimator="@null"
+        app:elevation="0dp"
+        app:liftOnScroll="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -26,7 +31,7 @@
                 android:layout_gravity="center"
                 android:text="Create Post"
                 android:textColor="@color/teal_700"
-                android:textSize="18sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
 
 

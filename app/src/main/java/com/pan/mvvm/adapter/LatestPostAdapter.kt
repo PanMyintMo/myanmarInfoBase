@@ -18,9 +18,7 @@ class LatestPostAdapter : RecyclerView.Adapter<LatestPostAdapter.MyViewHolder>()
         this.latestPostList = latestPostItem
         this.filterLatestPostList = latestPostItem
     }
-
-
-    fun filter(query: String?) {
+ fun filter(query: String?) {
         query?.let {
             filterLatestPostList = latestPostList.filter { latestPostItem ->
                 latestPostItem.title.contains(query, ignoreCase = true)

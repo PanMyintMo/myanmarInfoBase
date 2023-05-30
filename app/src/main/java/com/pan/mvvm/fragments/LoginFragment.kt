@@ -1,6 +1,5 @@
 package com.pan.mvvm.fragments
 
-import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -52,7 +51,7 @@ class LoginFragment : Fragment() {
         binding.resetPassword.setOnClickListener {
 
 
-            val data=activity?.intent?.data
+            val data = activity?.intent?.data
 
             val resetString = data?.getQueryParameter("resetString") ?: ""
 
@@ -61,7 +60,7 @@ class LoginFragment : Fragment() {
               val resetString = uri.getQueryParameters("resetString") ?: ""
   */
             val action =
-                LoginFragmentDirections.actionLoginFragmentToVerifyResetEmail(resetString.toString())
+                LoginFragmentDirections.actionLoginFragmentToVerifyResetEmail(resetString)
             findNavController().navigate(action)
 
         }
@@ -99,17 +98,20 @@ class LoginFragment : Fragment() {
                     //save token if login successful
                     tokenManager.saveToken(it.data!!.token)
                     tokenManager.saveId(it.data.id)
-
+                   // Log.d("TOKEN", tokenManager.getToken().toString())
                     Toast.makeText(requireContext(), "Login success", Toast.LENGTH_SHORT).show()
                     findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
 
                 }
+
                 is NetworkResult.Error -> {
                     binding.txtError.text = it.message
                 }
+
                 is NetworkResult.Loading -> {
                     binding.progressBar.isVisible = true
                 }
+
                 else -> {}
             }
         }

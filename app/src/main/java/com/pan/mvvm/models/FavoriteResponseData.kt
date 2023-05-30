@@ -1,14 +1,13 @@
 package com.pan.mvvm.models
 
-
 import com.google.gson.annotations.SerializedName
+import androidx.annotation.Keep
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
-import androidx.annotation.Keep
 
 @Keep
 @Parcelize
-data class AllFavoritedItemResponseClass(
+data class FavoriteResponseData(
     @SerializedName("cateId")
     val cateId: String,
     @SerializedName("cateName")
